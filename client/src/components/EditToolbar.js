@@ -1,10 +1,12 @@
 import { useContext } from 'react'
 import { GlobalStoreContext } from '../store'
+import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import RedoIcon from '@mui/icons-material/Redo';
 import UndoIcon from '@mui/icons-material/Undo';
 import CloseIcon from '@mui/icons-material/HighlightOff';
+import { Box } from '@mui/system';
 
 /*
     This toolbar is a functional React component that
@@ -14,6 +16,20 @@ import CloseIcon from '@mui/icons-material/HighlightOff';
 */
 function EditToolbar() {
     const { store } = useContext(GlobalStoreContext);
+    // return(
+    //     <div id="edit-toolbar">
+    //         <Box>
+    //             <Button
+    //                 id = 'add-song-button'
+    //             >
+    //                 <GroupsOutlinedIcon/>
+    //             </Button>
+    //         </Box>
+    //     </div>
+        
+
+    // )
+    
 
     function handleAddNewSong() {
         store.addNewSong();
@@ -34,7 +50,7 @@ function EditToolbar() {
                 id='add-song-button'
                 onClick={handleAddNewSong}
                 variant="contained">
-                <AddIcon />
+                <GroupsOutlinedIcon />
             </Button>
             <Button 
                 disabled={!store.canUndo() || store.currentModal!=="NONE"}
@@ -59,6 +75,7 @@ function EditToolbar() {
             </Button>
         </div>
     )
+            
 }
 
 export default EditToolbar;

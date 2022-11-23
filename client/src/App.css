@@ -16,18 +16,16 @@
   --bounceEasing: cubic-bezier(0.51, 0.92, 0.24, 1.15);
 }
 
-body {
-  background-color: var(--swatch-foundation);
-}
 
 #root {
   background-color: var(--swatch-primary);
   font-family: "Lexend Exa";
   position: absolute;
-  width: 80%;
-  left: 10%;
-  height: 90%;
-  top: 5%;
+  width: 100%;
+  left: 0%;
+  height: 100%;
+  top: 0%;
+  overflow: hidden; 
 }
 
 #app-root {
@@ -51,25 +49,34 @@ body {
   border-color: black;
   border-width: 2px;
   border-style: solid;
-  border-radius: 10px;
 }
 #splash-screen {
   background-size: cover;
-  background-image: url("https://imgs.search.brave.com/sYJhyWFlCUgSDXHQ6KTF4gK07XOJ3Wwrr0JSIqW6lXw/rs:fit:1200:1200:1/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJzaG9tZS5j/b20vaW1hZ2VzL3dh/bGxwYXBlcnMva2l0/dGVuLTM4NDB4MjE2/MC1jdXRlLWZ1bm55/LWFuaW1hbHMtNGst/MTYxNTEuanBn");
+  background-image: url("images/ShroomHaze.png");
   background-repeat: no-repeat;
   color: white;
   font-size: 5vw;
   border-color: black;
   border-width: 2px;
   border-style: solid;
-  border-radius: 10px;
-  padding-left: 10%;
   padding-top: 5%;
   padding-bottom: 5%;
-  height:70%;
+  height:100%;
   text-align: center;
   vertical-align: center;
-
+  overflow: hidden; 
+}
+#splashScreenDescription{
+  margin: 5px;
+  padding: 5%;
+  font-size: 24px;
+  top: 50%;   
+}
+#madeBy{
+  margin: 5px;
+  padding: 5%;
+  font-size: 24px;
+  top: 50%;   
 }
 
 #edit-toolbar {
@@ -147,18 +154,32 @@ body {
   float: left;
 }
 
+
+
 #list-selector-list, #playlist-cards{
   position: absolute;
   left: 0%;
-  top: 10%;
-  width: 100%;
-  max-height: 80%;
+  top: 10;
+  width: 50%;
+  height: 100%; 
   display: absolute;
   flex-direction: column;
   overflow: hidden;
   overflow-y:auto;
+  background-color: red;
 }
-
+/* left side  */
+#list-selector-list{
+  height:100%;
+  background-color: blue;
+}
+/* right side */
+#playlist-selector { 
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+}
 
 .list-card,
 .selected-list-card,

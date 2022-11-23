@@ -6,6 +6,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
+import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -21,17 +22,17 @@ function ListCard(props) {
     const { idNamePair, selected } = props;
 
     function handleLoadList(event, id) {
-        console.log("handleLoadList for " + id);
-        if (!event.target.disabled) {
-            let _id = event.target.id;
-            if (_id.indexOf('list-card-text-') >= 0)
-                _id = ("" + _id).substring("list-card-text-".length);
+        // console.log("handleLoadList for " + id);
+        // if (!event.target.disabled) {
+        //     let _id = event.target.id;
+        //     if (_id.indexOf('list-card-text-') >= 0)
+        //         _id = ("" + _id).substring("list-card-text-".length);
 
-            console.log("load " + event.target.id);
+        //     console.log("load " + event.target.id);
 
-            // CHANGE THE CURRENT LIST
-            store.setCurrentList(id);
-        }
+        //     // CHANGE THE CURRENT LIST
+        //     store.setCurrentList(id);
+        // }
     }
 
     function handleToggleEdit(event) {
@@ -94,7 +95,7 @@ function ListCard(props) {
                 <IconButton onClick={(event) => {
                         handleDeleteList(event, idNamePair._id)
                     }} aria-label='delete'>
-                    <DeleteIcon style={{fontSize:'48pt'}} />
+                    <KeyboardDoubleArrowDownIcon style={{fontSize:'48pt'}} />
                 </IconButton>
             </Box>
         </ListItem>
