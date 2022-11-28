@@ -8,6 +8,9 @@ import Fab from '@mui/material/Fab'
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography'
 import { Box } from '@mui/material';
+import EditToolbar from './EditToolbar';
+import AppBanner from './AppBanner';
+import Statusbar from './Statusbar'
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -40,31 +43,27 @@ const HomeScreen = () => {
     }
     return (
         <Box id="playlist-selector">
-            <div id="list-selector-heading">
-            <Fab 
-                size = "small"
-                color="primary" 
-                aria-label="add"
-                id="add-list-button"
-                onClick={handleCreateNewList}
-                disabled = {store.currentModal !=="NONE"}
-            >
-                <AddIcon />
-            </Fab>
+            <AppBanner /> 
+            <EditToolbar>
+
+            </EditToolbar>
+            
                 {/* <Typography variant="h3">Your Lists</Typography> */}
-            </div>
+            
             <Box id="list-selector-list">
                 {
                     listCard
+                    
                 }
                 <MUIDeleteModal />
             </Box>
-            <Box id = "list-selector-list" bgcolor = 'white'>
-                {
-                    listCard
-                }
+
+            <Box id = "list-selector-list-right" bgcolor = 'white' >
+            
             </Box>
-        </Box>)
+            <Statusbar></Statusbar>
+        </Box>
+        )
 }
 
 export default HomeScreen;

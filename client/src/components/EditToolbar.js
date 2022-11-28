@@ -1,12 +1,12 @@
 import { useContext } from 'react'
 import { GlobalStoreContext } from '../store'
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
-import Button from '@mui/material/Button';
-import AddIcon from '@mui/icons-material/Add';
-import RedoIcon from '@mui/icons-material/Redo';
-import UndoIcon from '@mui/icons-material/Undo';
-import CloseIcon from '@mui/icons-material/HighlightOff';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import SortOutlinedIcon from '@mui/icons-material/SortOutlined';
+import TextField from '@mui/material/TextField';
 import { Box } from '@mui/system';
+import { IconButton } from '@mui/material';
 
 /*
     This toolbar is a functional React component that
@@ -16,64 +16,70 @@ import { Box } from '@mui/system';
 */
 function EditToolbar() {
     const { store } = useContext(GlobalStoreContext);
-    // return(
-    //     <div id="edit-toolbar">
-    //         <Box>
-    //             <Button
-    //                 id = 'add-song-button'
-    //             >
-    //                 <GroupsOutlinedIcon/>
-    //             </Button>
-    //         </Box>
-    //     </div>
-        
-
-    // )
-    
 
     function handleAddNewSong() {
-        store.addNewSong();
+        // store.addNewSong();
     }
     function handleUndo() {
-        store.undo();
+       // store.undo();
     }
     function handleRedo() {
-        store.redo();
+       // store.redo();
     }
     function handleClose() {
-        store.closeCurrentList();
+       // store.closeCurrentList();
     }
     return (
-        <div id="edit-toolbar">
-            <Button
-                disabled={!store.canAddNewSong()|| store.currentModal!=="NONE"}
-                id='add-song-button'
+        <Box id="edit-toolbar">
+
+            <IconButton
+                disabled={false}
                 onClick={handleAddNewSong}
-                variant="contained">
-                <GroupsOutlinedIcon />
-            </Button>
-            <Button 
-                disabled={!store.canUndo() || store.currentModal!=="NONE"}
-                id='undo-button'
+                class = "editToolbar-button"
+                >
+                    <HomeOutlinedIcon />
+            </IconButton>
+            
+            <IconButton 
+                disabled={false}
                 onClick={handleUndo}
-                variant="contained">
-                    <UndoIcon />
-            </Button>
-            <Button 
-                disabled={!store.canRedo()|| store.currentModal!=="NONE"}
-                id='redo-button'
+                class = "editToolbar-button"
+                >   
+                <GroupsOutlinedIcon/>
+            </IconButton>
+
+            <IconButton 
+                disabled={false}
                 onClick={handleRedo}
-                variant="contained">
-                    <RedoIcon />
-            </Button>
-            <Button 
-                disabled={!store.canClose()|| store.currentModal!=="NONE"}
-                id='close-button'
+                class = "editToolbar-button"
+                >
+                    <PersonOutlineOutlinedIcon />
+            </IconButton>
+            
+                
+
+            
+            <IconButton 
+                disabled={false}
+                id = "sort-by"
+                class = "editToolbar-button"
                 onClick={handleClose}
-                variant="contained">
-                    <CloseIcon />
-            </Button>
-        </div>
+                >
+                <SortOutlinedIcon />
+            </IconButton>
+            <Box id = "sort-by-box">
+                Sort By
+            </Box>
+            <Box id = "search-field">
+            <TextField
+            id="search-textField"
+            label="Search field"
+            type="search"
+            variant="filled"
+            sx = {{width:'25ch', margin: '10px', m: 1}}
+            />
+            </Box>
+        </Box>
     )
             
 }

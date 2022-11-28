@@ -1,7 +1,8 @@
 import { useContext } from 'react'
 import { GlobalStoreContext } from '../store'
-import { Typography } from '@mui/material'
-
+import { Box, IconButton, Typography } from '@mui/material'
+import Fab from '@mui/material/Fab'
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 /*
     Our Status bar React component goes at the bottom of our UI.
     
@@ -12,10 +13,22 @@ function Statusbar() {
     let text ="";
     if (store.currentList)
         text = store.currentList.name;
+    function handleCreateNewList() {
+        store.createNewList();
+    }
     return (
-        <div id="playlister-statusbar">
-            <Typography variant="h4">{text}</Typography>
-        </div>
+       <Box id="playlister-statusbar">
+                <IconButton 
+                    size = "large"
+                    color="primary" 
+                    aria-label="add"
+                    id="add-list-button"
+                    onClick={handleCreateNewList}
+                    disabled = {store.currentModal !=="NONE"}
+                >
+                    <AddOutlinedIcon fontSize='large'/>
+                </IconButton>
+        </Box>
     );
 }
 
