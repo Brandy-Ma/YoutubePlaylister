@@ -7,6 +7,8 @@ import IconButton from '@mui/material/IconButton';
 import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
+import SongCard from './SongCard.js';
+import List from '@mui/material/List';
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -22,17 +24,17 @@ function ListCard(props) {
     const { idNamePair, selected } = props;
 
     function handleLoadList(event, id) {
-        // console.log("handleLoadList for " + id);
-        // if (!event.target.disabled) {
-        //     let _id = event.target.id;
-        //     if (_id.indexOf('list-card-text-') >= 0)
-        //         _id = ("" + _id).substring("list-card-text-".length);
+        console.log("handleLoadList for " + id);
+        if (!event.target.disabled) {
+            let _id = event.target.id;
+            if (_id.indexOf('list-card-text-') >= 0)
+                _id = ("" + _id).substring("list-card-text-".length);
 
-        //     console.log("load " + event.target.id);
+            console.log("load " + event.target.id);
 
-        //     // CHANGE THE CURRENT LIST
-        //     store.setCurrentList(id);
-        // }
+            // CHANGE THE CURRENT LIST
+            store.setCurrentList(id);
+        }
     }
 
     function handleToggleEdit(event) {
@@ -98,7 +100,57 @@ function ListCard(props) {
                     <KeyboardDoubleArrowDownIcon style={{fontSize:'48pt'}} />
                 </IconButton>
             </Box>
+           
         </ListItem>
+    
+    if(store.currentList!== null && store.currentList._id === idNamePair._id)
+    {
+        
+        cardElement =
+        <Box id = "list-opened">
+        <ListItem
+            id={idNamePair._id}
+            key={idNamePair._id}
+            sx={{ marginTop: '15px', display: 'flex', p: 1, border:2, borderRadius: 0, borderColor:"white" }}
+            style={{ width: '100%', fontSize: '48pt', color:"white"}}
+            button
+            onClick={(event) => {
+                handleLoadList(event, idNamePair._id)
+            }}
+        >
+            <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
+            <Box sx={{ p: 1 }}>
+                <IconButton onClick={handleToggleEdit} aria-label='edit'>
+                    <EditIcon style={{fontSize:'48pt'}} />
+                </IconButton>
+            </Box>
+            <Box sx={{ p: 1 }}>
+                <IconButton onClick={(event) => {
+                        handleDeleteList(event, idNamePair._id)
+                    }} aria-label='delete'>
+                    <KeyboardDoubleArrowDownIcon style={{fontSize:'48pt'}} />
+                </IconButton>
+            </Box>
+              
+        </ListItem>
+         <List 
+         id="playlist-cards" 
+         sx={{ width: '100%', bgcolor: 'background.paper' }}
+     >
+         {
+             store.currentList.songs.map((song, index) => (
+                 <SongCard
+                     id={'playlist-song-' + (index)}
+                     key={'playlist-song-' + (index)}
+                     index={index}
+                     song={song}
+                 />
+             ))  
+         }
+      </List>   
+
+        </Box>
+    }
 
     if (editActive) {
         cardElement =

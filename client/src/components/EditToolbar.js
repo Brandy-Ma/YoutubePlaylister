@@ -18,15 +18,19 @@ function EditToolbar() {
     const { store } = useContext(GlobalStoreContext);
 
     function handleAddNewSong() {
+
         // store.addNewSong();
     }
     function handleUndo() {
+
        // store.undo();
     }
     function handleRedo() {
+
        // store.redo();
     }
     function handleClose() {
+
        // store.closeCurrentList();
     }
     return (
