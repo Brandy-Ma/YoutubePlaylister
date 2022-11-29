@@ -557,10 +557,10 @@ function GlobalStoreContextProvider(props) {
     document.onkeydown = (e) => KeyPress(e);
 
     // THIS FUNCTION ENABLES THE PROCESS OF EDITING A LIST NAME
-    store.setIsListNameEditActive = function () {
+    store.setIsListNameEditActive = function (currentPlaylist) {
         storeReducer({
             type: GlobalStoreActionType.SET_LIST_NAME_EDIT_ACTIVE,
-            payload: null
+            payload: currentPlaylist
         });
     }
 
