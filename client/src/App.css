@@ -218,15 +218,23 @@
   /* left: 10%;
   top: 10; */
   width: 100%;
-  height: 2%;
-  max-height: 50vh; 
+  /* height: auto;
+  max-height: 40vh;  */
   display: absolute;
   flex-direction: column;
   overflow: hidden;
-  overflow-y:auto;
-  background-color: red;
+  background-color: transparent;
 }
 
+#list-Box{
+  width: 100%;
+  height: 33vh;
+  max-height: 33vh; 
+  overflow-y: scroll;
+  overflow-x: hidden;
+  background-color: transparent;
+  background-color: green;
+}
 
 #playlist-selector { 
   width: 100%;
@@ -237,7 +245,7 @@
 .list-card,
 .selected-list-card,
 .unselected-list-card {
-  font-size: 18pt;
+  font-size: 10pt;
   margin: 10px;
   padding: 20px;
   overflow: auto;
@@ -253,8 +261,7 @@
   margin-left: 2%;
   margin-right: 2%;
   margin-bottom: 2%;
-
-  background-color: blue;
+  background-color: olivedrab;
   overflow: auto;
 }
 
@@ -270,7 +277,7 @@
   flex-direction: column;
   overflow: auto;
   overflow-y:auto;
-  background-color: red;
+  background-color: olivedrab;
 }
 
 /*right side*/
@@ -290,6 +297,7 @@
   background-color: #cccccc;
   color: #666666;
   pointer-events: none;
+  
 }
 
 .unselected-list-card:hover {
@@ -304,7 +312,11 @@
 }
 
 .unselected-list-card {
-  background-color: var(--swatch-complement);
+  /* background-color: var(--swatch-complement); */
+  background-color: grey;
+  border: 1px solid black;
+  height: auto;
+  font-size: 24pt;
 }
 
 .list-card-button {
@@ -502,13 +514,26 @@ input {
 
 #list-opened{
   flex-direction: row;
-  height: 2%;
-  max-height: 2%;
+  height: 50vh; 
+  max-height: 50vh; 
   border: 2px;
   border-color: white;
   border-width: 100px;
   border-radius: 2px;
   background-color: pink;
+  position: relative;
+
+}
+#fixed-Bottom{
+ 
+ bottom: 0px; 
+ float: right;
+ right: 5px;
+}
+.insideButtons{
+  margin-left: 5px;
+  margin-right: 5px;
+  display: relative;
 }
 
 /* ANIMATIONS

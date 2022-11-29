@@ -44,9 +44,10 @@ function SongCard(props) {
         }
     }
     const divStyle ={
-        background:'url(https://images.unsplash.com/photo-1557672172-298e090bd0f1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8cmVzaW58ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60)', 
-        backgroundSize:"cover", 
-        backgroundRepeat:"no-repeat" 
+        // background:'url(https://images.unsplash.com/photo-1557672172-298e090bd0f1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8cmVzaW58ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60)', 
+        // backgroundSize:"cover", 
+        // backgroundRepeat:"no-repeat" 
+        overflow: 'hidden'
     }
     let cardClass = "list-card unselected-list-card";
     return (
@@ -70,13 +71,13 @@ function SongCard(props) {
                 href={"https://www.youtube.com/watch?v=" + song.youTubeId}>
                 {song.title} by {song.artist}
             </a>
-            <input
+            {/* <input
                 type="button"
                 id={"remove-song-" + index}
                 className="list-card-button"
                 value={"\u2715"}
                 onClick={handleRemoveSong}
-            />
+            /> */}
         </div>
     );
 }
