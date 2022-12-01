@@ -117,6 +117,15 @@ function ListCard(props) {
         }
     }
 
+    function handleUndo() {
+
+        store.undo();
+     }
+     function handleRedo() {
+ 
+        store.redo();
+     }
+
     let cardElement =
         <Box >
             <ListItem
@@ -125,7 +134,7 @@ function ListCard(props) {
                 sx={{ marginTop: '15px', display: 'flex', p: 1, border:2, borderRadius: 0, borderColor:"white" }}
                 style={{ width: '100%', fontSize: '48pt', color:"white"}}
                 // onClick={(event) => {
-                //     handleLoadList(event, idNamePair._id)
+                //     handleSetCurrentList(idNamePair._id)
                 // }}
             >
                 <Box sx = {{display: 'table-column', p: 1, flexGrow: 1, width: 400, overflowY:'hidden', overflowX:'hidden' }}
@@ -139,11 +148,11 @@ function ListCard(props) {
                         by:     
                     </Box>
                 </Box>
-                <Box sx={{ p: 1 }}>
+                {/* <Box sx={{ p: 1 }}>
                     <IconButton onClick={handleToggleEdit} aria-label='edit'>
                         <EditIcon style={{fontSize:'48pt'}} />
                     </IconButton>
-                </Box>
+                </Box> */}
                 <Box sx={{ p: 1 }}>
                     <IconButton onClick={(event) => {
                     handleLoadList(event, idNamePair._id)
@@ -161,80 +170,7 @@ function ListCard(props) {
         </Box>
     
     
-    
-    // if(editActive && (store.currentList!== null) && (store.currentList._id === idNamePair._id))
-    // {
-        
-    //     cardElement =
-    //     <Box id = "list-opened">
-    //             <ListItem
-    //                 id={idNamePair._id}
-    //                 key={idNamePair._id}
-    //                 sx={{ marginTop: '15px', display: 'flex', p: 1, border:2, borderRadius: 0, borderColor:"white" }}
-    //                 style={{ width: '100%', fontSize: '48pt', color:"white"}}
-    //                 // button
-    //                 // onClick={(event) => {
-    //                 //     handleLoadList(event, idNamePair._id)
-    //                 // }}
-    //             >
-    //                 <Box sx={{ p: 1, flexGrow: 1, width: 400, overflowY:'hidden', overflowX:'hidden' }}
-    //                 onClick={handleDoubleClick}
-    //                 style={{fontSize:'24pt'}}>{idNamePair.name}</Box>
-    //                 <Box sx={{ p: 1 }}>
-    //                     <IconButton onClick={handleToggleEdit} aria-label='edit'>
-    //                         <EditIcon style={{fontSize:'48pt'}} />
-    //                     </IconButton>
-    //                 </Box>
-    //                 <Box sx={{ p: 1 }}>
-    //                 <IconButton onClick={(event) => {
-    //                     handleCloseList(event, idNamePair._id)
-    //                 }}>
-    //                     <KeyboardDoubleArrowUpIcon style={{fontSize:'24pt'}} />
-    //                 </IconButton>
 
-                    
-    //                     {/* <IconButton onClick={(event) => {
-    //                             handleDeleteList(event, idNamePair._id)
-    //                         }} aria-label='delete'>
-    //                         <KeyboardDoubleArrowDownIcon style={{fontSize:'48pt'}} />
-    //                     </IconButton> */}
-    //                 </Box>
-                
-    //             </ListItem>
-    //             <Box id = "list-Box">
-    //                 <List 
-    //                 id="playlist-cards" 
-    //                 sx={{ width: '100%', bgcolor: 'background.paper' }}
-    //                 >
-    //                 {
-    //                     store.currentList.songs.map((song, index) => (
-    //                         <SongCard
-    //                             id={'playlist-song-' + (index)}
-    //                             key={'playlist-song-' + (index)}
-    //                             index={index}
-    //                             song={song}
-    //                         />
-    //                     ))  
-    //                 }
-    //                 </List>
-    //             </Box>
-    //             <Box id = "fixed-Bottom">  
-    //                 <ListItem >
-    //                         <Button class= "insideButtons" >Delete</Button>
-    //                         <Button class="insideButtons" onClick={handleAddNewSong}>Add</Button>
-    //                         <Button class="insideButtons">Edit</Button>
-    //                         <IconButton onClick={(event) => {
-    //                             handleCloseList(event, idNamePair._id)
-    //                         }}>
-    //                         <KeyboardDoubleArrowUpIcon style={{fontSize:'20pt'}} />
-    //                         </IconButton>
-    //                 </ListItem>
-    //             </Box> 
-    //             { modalJSX }
-    //     </Box>
-
-    // }
-    // else
     if (editActive) {
         cardElement =
         <Box >
@@ -263,11 +199,11 @@ function ListCard(props) {
                 InputLabelProps={{style: {fontSize: 24}}}
                 autoFocus
             />
-                <Box sx={{ p: 1 }}>
+                {/* <Box sx={{ p: 1 }}>
                     <IconButton onClick={handleToggleEdit} aria-label='edit'>
                         <EditIcon style={{fontSize:'48pt'}} />
                     </IconButton>
-                </Box>
+                </Box> */}
                 <Box sx={{ p: 1 }}>
                     <IconButton onClick={(event) => {
                     handleLoadList(event, idNamePair._id)
@@ -327,17 +263,17 @@ function ListCard(props) {
                         by:     
                     </Box>
                 </Box>
-                    <Box sx={{ p: 1 }}>
+                    {/* <Box sx={{ p: 1 }}>
                         <IconButton onClick={handleToggleEdit} aria-label='edit'>
                             <EditIcon style={{fontSize:'48pt'}} />
                         </IconButton>
-                    </Box>
+                    </Box> */}
                     <Box sx={{ p: 1 }}>
-                    <IconButton onClick={(event) => {
+                    {/* <IconButton onClick={(event) => {
                         handleCloseList(event, idNamePair._id)
                     }}>
                         <KeyboardDoubleArrowUpIcon style={{fontSize:'24pt'}} />
-                    </IconButton>
+                    </IconButton> */}
 
                     
                         {/* <IconButton onClick={(event) => {
@@ -370,9 +306,11 @@ function ListCard(props) {
                 <Box id = "fixed-Bottom">  
                     <ListItem >
                             <Button class="insideButtons">Publish</Button>
-                            <Button class="insideButtons">Undo</Button>
-                            <Button class="insideButtons">Redo</Button>
-                            <Button class= "insideButtons" >Delete</Button>
+                            <Button class="insideButtons" onClick ={handleUndo}>Undo</Button>
+                            <Button class="insideButtons" onClick={handleRedo}>Redo</Button>
+                            <Button class= "insideButtons" onClick={(event) => {
+                                handleDeleteList(event, idNamePair._id)
+                            }}>Delete</Button>
                             <Button class="insideButtons" onClick={handleAddNewSong}>Duplicate</Button>
                             <IconButton onClick={(event) => {
                                 handleCloseList(event, idNamePair._id)

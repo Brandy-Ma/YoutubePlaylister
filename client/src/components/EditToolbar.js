@@ -80,8 +80,9 @@ function EditToolbar() {
             label="Search field"
             type="search"
             variant="filled"
-            sx = {{width:'25ch', margin: '10px', m: 1}}
+            sx = {{width:'80ch', marginRight: '10px', m: 1 }}
             />
+            {/* backgroundColor:'white' */}
             </Box>
         </Box>
     )

@@ -9,7 +9,7 @@ const User = require('../models/user-model');
 */
 createPlaylist = (req, res) => {
     const body = req.body;
-    console.log("createPlaylist body: " + JSON.stringify(body.ownerEmail) + " LOOOK HEREsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssEER" );
+    console.log("createPlaylist body: " + JSON.stringify(body.ownerEmail) );
 
     if (!body) {
         return res.status(400).json({
@@ -25,7 +25,7 @@ createPlaylist = (req, res) => {
     }
 
     User.findOne({ _id: req.userId }, (err, user) => {
-        console.log("createPlaylist body: " + JSON.stringify(user.email) + " LOOOK HEREsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssEER" );
+        console.log("createPlaylist body: " + JSON.stringify(user.email) );
         console.log("user found: " + JSON.stringify(user));
         if(body.ownerEmail === user.email)
         {
