@@ -28,6 +28,7 @@ export const GlobalStoreActionType = {
     MARK_LIST_FOR_DELETION: "MARK_LIST_FOR_DELETION",
     SET_CURRENT_LIST: "SET_CURRENT_LIST",
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
+    PUBLISH_PLAYLIST: "PUBLISH_PLAYLIST",
     EDIT_SONG: "EDIT_SONG",
     REMOVE_SONG: "REMOVE_SONG",
     HIDE_MODALS: "HIDE_MODALS"
@@ -169,7 +170,19 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null
                 });
             }
-            // 
+            case GlobalStoreActionType.PUBLISH_PLAYLIST: {
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: payload,
+                    currentList: store.currentList,
+                    currentSongIndex: -1,
+                    currentSong: store.currentSong,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null
+                });
+            }
             case GlobalStoreActionType.EDIT_SONG: {
                 return setStore({
                     currentModal : CurrentModal.EDIT_SONG,
@@ -260,11 +273,21 @@ function GlobalStoreContextProvider(props) {
         history.push("/");
         tps.clearAllTransactions();
     }
+    // listens: [],
+    // published: {
+    //     type :[{
+    //         isPublished: Boolean,
+    //         whenPublished: Date
+    //     }], required: true },
+    // likesList: [],
+    // dislikesList: [],
 
     // THIS FUNCTION CREATES A NEW LIST
     store.createNewList = async function () {
         let newListName = "Untitled" + store.newListCounter;
-        const response = await api.createPlaylist(newListName, [], auth.user.email);
+        console.log("USER DETAINS"+ JSON.stringify(auth.user));
+        const response = await api.createPlaylist(newListName, auth.user.userName, 
+            [], auth.user.email, 0, {isPublished : false, whenPublished: null}, [], [], []);
         console.log("createNewList response: " + response);
         if (response.status === 201) {
             tps.clearAllTransactions();
@@ -448,10 +471,38 @@ function GlobalStoreContextProvider(props) {
         song.title = songData.title;
         song.artist = songData.artist;
         song.youTubeId = songData.youTubeId;
-
+        
         // NOW MAKE IT OFFICIAL
         store.updateCurrentList();
     }
+
+
+    store.publishPlaylistCard = function (){
+
+        async function updateCurrentListp() {
+            let response = await api.updatePlaylistById(store.currentList._id, store.currentList);
+            console.log(JSON.stringify(store.currentList)+ " I AM GOING TO DIE SOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOON")
+            if (response.data.success) {
+                async function updatePublishReducer() {
+                    response = await api.getPlaylistPairs();
+                        if (response.data.success) {
+                            let pairsArray = response.data.idNamePairs;
+                            storeReducer({
+                                type: GlobalStoreActionType.PUBLISH_PLAYLIST,
+                                payload: pairsArray
+                            });
+                    }
+                }
+                updatePublishReducer();
+            }
+        }
+
+        store.currentList.published = {isPublished:true, whenPublished: new Date().toISOString()}
+        updateCurrentListp();
+        
+    }
+
+    
     store.addNewSong = () => {
         let playlistSize = store.getPlaylistSize();
         store.addCreateSongTransaction(
@@ -491,7 +542,9 @@ function GlobalStoreContextProvider(props) {
     }
     store.updateCurrentList = function() {
         async function asyncUpdateCurrentList() {
+            
             const response = await api.updatePlaylistById(store.currentList._id, store.currentList);
+            console.log(JSON.stringify(store.currentList)+ " I AM GOING TO DIE SOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOON")
             if (response.data.success) {
                 storeReducer({
                     type: GlobalStoreActionType.SET_CURRENT_LIST,
@@ -540,21 +593,31 @@ function GlobalStoreContextProvider(props) {
     store.canUndo = function(){
         return tps.hasTransactionToUndo();
     }
-    function KeyPress(event){
-        if(event.ctrlKey && !store.modalOpen)
+
+    store.addComments = function(){
+
+        let commented = document.getElementById("comment-textField").value.trim();
+        if(commented !=="")
         {
-            if(event.key === 'z')
-            {
-                store.undo();
-            }
-            else if(event.key === 'y')
-            {
-                store.redo();
-            }
+            store.currentList.comments.push( {comment: commented, user: auth.user.userName})
         }
-        
+        store.updateCurrentList();
     }
-    document.onkeydown = (e) => KeyPress(e);
+    // function KeyPress(event){
+    //     if(event.ctrlKey && !store.modalOpen)
+    //     {
+    //         if(event.key === 'z')
+    //         {
+    //             store.undo();
+    //         }
+    //         else if(event.key === 'y')
+    //         {
+    //             store.redo();
+    //         }
+    //     }
+        
+    // }
+    // document.onkeydown = (e) => KeyPress(e);
 
     // THIS FUNCTION ENABLES THE PROCESS OF EDITING A LIST NAME
     store.setIsListNameEditActive = function (currentPlaylist) {

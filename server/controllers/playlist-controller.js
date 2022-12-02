@@ -7,10 +7,26 @@ const User = require('../models/user-model');
     
     @author McKilla Gorilla
 */
+// name: newListName,
+// ownerUsername: newUserName,
+// songs: newSongs,
+// ownerEmail: userEmail,
+// listens: listen,
+// published: publish,
+// likesList: likes,
+//dislikesList: dislikes
 createPlaylist = (req, res) => {
     const body = req.body;
-    console.log("createPlaylist body: " + JSON.stringify(body.ownerEmail) );
-
+    console.log("createPlaylist body: " + JSON.stringify(body.ownerEmail) ); 
+    console.log("HELLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLO")
+    console.log("Playlist details " +
+    JSON.stringify(body.name) +" "+
+    JSON.stringify(body.ownerUsername) +" "+
+    JSON.stringify(body.songs) +" "+
+    JSON.stringify(body.listens) +" "+
+    JSON.stringify(body.published) +" "+
+    JSON.stringify(body.likesList) +" "+
+    JSON.stringify(body.dislikesList) +" ");
     if (!body) {
         return res.status(400).json({
             success: false,
@@ -146,7 +162,8 @@ getPlaylistPairs = async (req, res) => {
                         let list = playlists[key];
                         let pair = {
                             _id: list._id,
-                            name: list.name
+                            name: list.name,
+                            playlist: list
                         };
                         pairs.push(pair);
                     }
@@ -228,9 +245,11 @@ updatePlaylist = async (req, res) => {
                 if (user._id == req.userId) {
                     console.log("correct user!");
                     console.log("req.body.name: " + req.body.name);
-
+                    
                     list.name = body.playlist.name;
                     list.songs = body.playlist.songs;
+                    list.comments = body.playlist.comments;
+                    list.published = body.playlist.published;
                     list
                         .save()
                         .then(() => {

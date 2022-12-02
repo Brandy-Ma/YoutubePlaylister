@@ -11,7 +11,7 @@ export default function YoutubePlaylister() {
     // FROM ONE SONG TO THE NEXT
 
     //Just so my shit doesn;t break atm
-    let player;
+    let player = "";
 
 
     // THIS HAS THE YOUTUBE IDS FOR THE SONGS IN OUR PLAYLIST
@@ -25,8 +25,8 @@ export default function YoutubePlaylister() {
     let currentSong = 0;
 
     const playerOptions = {
-        height: '390',
-        width: '640',
+        height: '200',
+        width: '100%',
         playerVars: {
             // https://developers.google.com/youtube/player_parameters
             autoplay: 0,
@@ -56,25 +56,10 @@ export default function YoutubePlaylister() {
         currentSong = currentSong % playlist.length;
       }
       
-    function previousSong(){
-        decSong();
-        // loadAndPlayCurrentSong();
-    }
     
-    function nextSong(){
-        incSong();
-        loadAndPlayCurrentSong();
-    }
-    
-    function pauseSong(){
-        player.pauseVideo();
-    }
-    
-    function playSong(){
-        player.playVideo();
-    }
 
 function onPlayerReady(event) {
+    player = event.target
     loadAndPlayCurrentSong(event.target);
     event.target.playVideo();
 }
@@ -85,7 +70,7 @@ function onPlayerReady(event) {
     // VALUE OF 0 MEANS THE SONG PLAYING HAS ENDED.
     function onPlayerStateChange(event) {
         let playerStatus = event.data;
-        let player = event.target;
+        player = event.target;
         if (playerStatus === -1) {
             // VIDEO UNSTARTED
             console.log("-1 Video unstarted");
@@ -109,6 +94,24 @@ function onPlayerReady(event) {
         }
     }
 
+    function previousSong(){
+        decSong();
+        loadAndPlayCurrentSong(player);
+    }
+    
+    function nextSong(){
+        incSong();
+        loadAndPlayCurrentSong(player);
+    }
+    
+    function pauseSong(){
+        player.pauseVideo();
+    }
+    
+    function playSong(){
+        player.playVideo();
+    }
+
     return <Box>
         <YouTube
         videoId={playlist[currentSong]}
@@ -117,9 +120,9 @@ function onPlayerReady(event) {
         onStateChange={onPlayerStateChange} />
         <Box id ="Playlister-buttons">
             <Button onClick={previousSong}> Rewind </Button>
-            <Button> Pause </Button>
-            <Button> Play </Button>
-            <Button> Skip </Button>
+            <Button onClick={pauseSong}> Pause </Button>
+            <Button onClick={playSong}> Play </Button>
+            <Button onClick={nextSong}> Skip </Button>
         </Box>
             
     </Box>        

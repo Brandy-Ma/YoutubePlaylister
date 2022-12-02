@@ -28,6 +28,41 @@ function ListCard(props) {
     const [text, setText] = useState("");
     const { idNamePair, selected } = props;
 
+
+    let publishedStyle = {};
+    let isPublished = false;
+    if(idNamePair.playlist)
+    {   
+        console.log("AM IN THE IDNAME PAIR PLAYLISTTTTTTTTTTTTTTTTTTTTT")
+        if(idNamePair.playlist.published)
+        {
+            console.log(idNamePair.playlist.published)
+            if(idNamePair.playlist.published.isPublished === true)
+            {
+                console.log("Axxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+                isPublished = true;
+            }
+        }
+       
+    }
+
+    if(isPublished === true){
+        publishedStyle ={
+            backgroundColor: 'pink'
+        }
+    }
+    else
+    {
+        publishedStyle ={
+            backgroundColor: 'orange'
+        }
+    }
+    
+    
+    
+
+
+
     function handleLoadList(event, id) {
         console.log("handleLoadList for " + id);
         if (!event.target.disabled) {
@@ -92,6 +127,7 @@ function ListCard(props) {
     if (selected) {
         selectClass = "selected-list-card";
     }
+
     let cardStatus = false;
     if (store.isListNameEditActive) {
         cardStatus = true;
@@ -116,7 +152,9 @@ function ListCard(props) {
             handleToggleEdit(event);
         }
     }
-
+    function handlePublish() {
+        store.publishPlaylistCard();
+     }
     function handleUndo() {
 
         store.undo();
@@ -125,9 +163,10 @@ function ListCard(props) {
  
         store.redo();
      }
-
+    console.log(JSON.stringify(idNamePair.playlist) +" I AM GOING TO KILL MYSELFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
     let cardElement =
-        <Box >
+        <Box 
+        style = {publishedStyle}>
             <ListItem
                 id={idNamePair._id}
                 key={idNamePair._id}
@@ -145,7 +184,7 @@ function ListCard(props) {
                     </Box>
                     <Box style={{fontSize:'10pt'}}
                     Box sx={{ p: 1, flexGrow: 1, width: 400, overflowY:'hidden', overflowX:'hidden' }}>
-                        by:     
+                        by:{idNamePair.playlist.ownerUsername}  
                     </Box>
                 </Box>
                 {/* <Box sx={{ p: 1 }}>
@@ -168,9 +207,40 @@ function ListCard(props) {
             
             </ListItem>
         </Box>
-    
-    
-
+    if(store.currentList && store.currentList.published && store.currentList.isPublished === true)
+    {
+        cardElement =
+        <Box 
+        style = {publishedStyle}>
+            <ListItem
+                id={idNamePair._id}
+                key={idNamePair._id}
+                sx={{ marginTop: '15px', display: 'flex', p: 1, border:2, borderRadius: 0, borderColor:"white" }}
+                style={{ width: '100%', fontSize: '48pt', color:"white"}}
+            >
+                <Box sx = {{display: 'table-column', p: 1, flexGrow: 1, width: 400, overflowY:'hidden', overflowX:'hidden' }}
+                >
+                    <Box sx={{ p: 1, flexGrow: 1, width: 400, overflowY:'hidden', overflowX:'hidden' }}
+                    onClick={handleDoubleClick}
+                    style={{fontSize:'24pt'}}>{idNamePair.name}
+                    </Box>
+                    <Box style={{fontSize:'10pt'}}
+                    Box sx={{ p: 1, flexGrow: 1, width: 400, overflowY:'hidden', overflowX:'hidden' }}>
+                    by:{idNamePair.playlist.ownerUsername}  
+                </Box>
+                </Box>
+                <Box sx={{ p: 1 }}>
+                    <IconButton onClick={(event) => {
+                    handleLoadList(event, idNamePair._id)
+                }}>
+                    <KeyboardDoubleArrowDownIcon style={{fontSize:'24pt'}} />
+                </IconButton>
+                </Box>
+            
+            </ListItem>
+        </Box>
+    }
+    else
     if (editActive) {
         cardElement =
         <Box >
@@ -241,7 +311,8 @@ function ListCard(props) {
     {
         
         cardElement =
-        <Box id = "list-opened">
+        <Box id = "list-opened"
+        style = {publishedStyle}>
                 <ListItem
                     id={idNamePair._id}
                     key={idNamePair._id}
@@ -258,10 +329,10 @@ function ListCard(props) {
                     onClick={handleDoubleClick}
                     style={{fontSize:'24pt'}}>{idNamePair.name}
                     </Box>
-                    <Box style={{fontSize:'10pt'}}
-                    Box sx={{ p: 1, flexGrow: 1, width: 400, overflowY:'hidden', overflowX:'hidden' }}>
-                        by:     
-                    </Box>
+                        <Box style={{fontSize:'10pt'}}
+                        Box sx={{ p: 1, flexGrow: 1, width: 400, overflowY:'hidden', overflowX:'hidden' }}>
+                        by:{idNamePair.playlist.ownerUsername}  
+                        </Box>
                 </Box>
                     {/* <Box sx={{ p: 1 }}>
                         <IconButton onClick={handleToggleEdit} aria-label='edit'>
@@ -305,7 +376,7 @@ function ListCard(props) {
                 </Box>
                 <Box id = "fixed-Bottom">  
                     <ListItem >
-                            <Button class="insideButtons">Publish</Button>
+                            <Button class="insideButtons" onClick={handlePublish}>Publish</Button>
                             <Button class="insideButtons" onClick ={handleUndo}>Undo</Button>
                             <Button class="insideButtons" onClick={handleRedo}>Redo</Button>
                             <Button class= "insideButtons" onClick={(event) => {

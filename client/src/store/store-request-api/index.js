@@ -22,12 +22,36 @@ const api = axios.create({
 // WORK, AND SOME REQUIRE DATA, WHICH WE WE WILL FORMAT HERE, FOR WHEN
 // WE NEED TO PUT THINGS INTO THE DATABASE OR IF WE HAVE SOME
 // CUSTOM FILTERS FOR QUERIES
-export const createPlaylist = (newListName, newSongs, userEmail) => {
+//newListName, auth.user.userName, [], auth.user.email, 0, {isPublished : false, whenPublished: null}, [], []
+
+// name: { type: String, required: true },
+//         ownerUsername: {type:String, required:true},
+//         ownerEmail: { type: String, required: true },
+//         songs: { type: [{
+//             title: String,
+//             artist: String,
+//             youTubeId: String
+//         }], required: true },
+//         listens: {type: Number},
+//         published: {
+//             type :[{
+//                 isPublished: Boolean,
+//                 whenPublished: Date
+//             }], required: true },
+//         likesList: [],
+//         dislikesList: [],
+export const createPlaylist = (newListName, newUserName,newSongs, userEmail, listen, publish, likes, dislikes, comments) => {
     return api.post(`/playlist/`, {
         // SPECIFY THE PAYLOAD
         name: newListName,
+        ownerUsername: newUserName,
         songs: newSongs,
-        ownerEmail: userEmail
+        ownerEmail: userEmail,
+        listens: listen,
+        published: publish,
+        likesList: likes,
+        dislikesList: dislikes,
+        commentList: comments
     })
 }
 export const deletePlaylistById = (id) => api.delete(`/playlist/${id}`)

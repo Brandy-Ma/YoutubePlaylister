@@ -21,10 +21,10 @@
   background-color: var(--swatch-primary);
   font-family: "Lexend Exa";
   position: absolute;
-  width: 80%;
-  left: 10%;
-  height: 90%;
-  top: 5%;
+  width: 100%;
+  left: 0%;
+  height: 100%;
+  top: 0%;
   overflow: hidden; 
 }
 
@@ -212,7 +212,7 @@
   flex-direction: column;
   overflow: hidden;
   /* overflow-y:auto; */
-  background-color: red;
+  background-color: grey;
 }
 #playlist-cards{
   /* left: 10%;
@@ -224,7 +224,7 @@
   flex-direction: column;
 
   overflow: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
   background-color: transparent;
 }
 
@@ -234,14 +234,14 @@
   max-height: 33vh; 
 
   background-color: transparent;
-  background-color: green;
+  background-color: grey;
   scroll-behavior: smooth;
 }
 
 #playlist-selector { 
   width: 100%;
   height: 100%;
-  background-color: orange;
+  background-color: grey;
 }
 
 .list-card,
@@ -263,7 +263,7 @@
   margin-left: 2%;
   margin-right: 2%;
   margin-bottom: 2%;
-  background-color: olivedrab;
+  background-color: transparent;
   overflow: auto;
 }
 
@@ -278,7 +278,7 @@
   display: absolute;
   flex-direction: column;
   overflow: auto;
-  overflow-y:auto;
+  overflow-y:hidden;
   background-color: olivedrab;
 }
 
@@ -290,7 +290,7 @@
   margin-top: 2%;
   margin-left: 2%;
   margin-right: 2%;
-  background-color: red;
+  background-color: white;
 }
 
 .list-card:aria-disabled,
@@ -396,6 +396,12 @@ input {
   color: var(--swatch-neutral);
 }
 
+
+#comment-Section{
+  width: 100%;
+  height: 100%;
+  background-color: #e1e4cb;
+}
 /* THIS STYLE SHEET MANAGES STYLE FOR OUR MODAL, i.e. DIALOG BOX */
 
 .modal {
