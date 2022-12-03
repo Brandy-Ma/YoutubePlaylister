@@ -2,6 +2,7 @@ import { useContext } from 'react'
 import HomeScreen from './HomeScreen'
 import SplashScreen from './SplashScreen'
 import AuthContext from '../auth'
+import { Box, Button } from '@mui/material';
 
 export default function HomeWrapper() {
     const { auth } = useContext(AuthContext);
@@ -9,6 +10,8 @@ export default function HomeWrapper() {
     
     if (auth.loggedIn)
         return <HomeScreen />
+
+        
     else
         return <SplashScreen />
 }

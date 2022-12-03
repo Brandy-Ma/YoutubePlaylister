@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 function SongCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const [ draggedTo, setDraggedTo ] = useState(0);
-    const { song, index } = props;
+    const { song, index, playlist } = props;
 
     function handleDragStart(event) {
         event.dataTransfer.setData("song", index);
@@ -51,6 +51,14 @@ function SongCard(props) {
         overflow: 'hidden'
     }
     let cardClass = "list-card unselected-list-card";
+
+
+
+//   console.log(JSON.stringify(playlist) + "SADDWASDAWSDAWSDWASDWASD")
+// playlist.published.isPublish == true is how I return a different list card
+    
+
+
     return (
              <div
             style={ divStyle }

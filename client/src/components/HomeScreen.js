@@ -90,8 +90,6 @@ const HomeScreen = () => {
 
     useEffect(() => {
         // Update the document title using the browser API
-        console.log(value);
-        console.log("VALUE IS ABOVEEEEEEEE");
         if(value == 2)
         {
             setValue(0);
@@ -130,11 +128,20 @@ const HomeScreen = () => {
             onKeyPress={handleKeyPress}
         />
     }
+    function handleVisible(){
+        document.getElementById("Player-Tab").style.visibility = "visible";
+    }
+
+    function handleInvisible(){
+        console.log("This worked")
+        document.getElementById("Player-Tab").style.visibility = "hidden";
+    }
     
     
     
     let homeScreen = 
     <Box id="playlist-selector">
+            
             <AppBanner /> 
             <EditToolbar>
 
@@ -154,17 +161,17 @@ const HomeScreen = () => {
                 <Box sx={{ width: '100%', overflowX:'hidden'}}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                        <Tab label="Player" {...a11yProps(0)} />
+                        <Tab label="Player"  {...a11yProps(1)}/>
                         <Tab label="Comments" {...a11yProps(1)} />
                         </Tabs>
                     </Box>
-                    <TabPanel value={value} index={0}>
-                        <Box id = "Player-Tab">
+                    <TabPanel value={value} index={0} onClick= {handleVisible}>
+                    <Box id = "Player-Tab" >
                             <YoutubePlaylister></YoutubePlaylister>
-                        </Box>
-                        
+                     </Box>
                     </TabPanel>
-                    <TabPanel value={value} index={1}>
+                    
+                    <TabPanel value={value} index={1} onClick={handleInvisible}>
                         <Box style={{border:'2px solid black', backgroundColor: 'white'}}
                         sx ={{width: 1, display:'column'}}>
                             <Box sx ={{width: 1, height: '45vh', display:'column'}}>
@@ -212,16 +219,17 @@ const HomeScreen = () => {
                 <Box sx={{ width: '100%', overflowX:'hidden'}}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                        <Tab label="Player" {...a11yProps(0)} />
+                        <Tab label="Player"  {...a11yProps(1)}/>
                         <Tab label="Comments" {...a11yProps(1)} />
                         </Tabs>
                     </Box>
                     <TabPanel value={value} index={0}>
-                        <Box id = "Player-Tab">
-                            <YoutubePlaylister></YoutubePlaylister>
-                        </Box>
                         
+                        <Box id = "Player-Tab">
+                                <YoutubePlaylister></YoutubePlaylister>
+                        </Box>
                     </TabPanel>
+                    
                     <TabPanel value={value} index={1}>
                         <Box style={{border:'2px solid black', backgroundColor: 'white'}}
                         sx ={{width: 1, display:'column'}}>
