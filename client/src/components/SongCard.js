@@ -56,11 +56,7 @@ function SongCard(props) {
 
 //   console.log(JSON.stringify(playlist) + "SADDWASDAWSDAWSDWASDWASD")
 // playlist.published.isPublish == true is how I return a different list card
-    
-
-
-    return (
-             <div
+    let songCards =  <Box
             style={ divStyle }
             key={index}
             id={'song-' + index + '-card'}
@@ -74,12 +70,7 @@ function SongCard(props) {
             onClick={handleClick}
         >
             {index + 1}.
-            <a
-                id={'song-' + index + '-link'}
-                className="song-link"
-                href={"https://www.youtube.com/watch?v=" + song.youTubeId}>
-                {song.title} by {song.artist}
-            </a>
+            {song.title} by {song.artist}
             <input
                 type="button"
                 id={"remove-song-" + index}
@@ -87,8 +78,29 @@ function SongCard(props) {
                 value={"\u2715"}
                 onClick={handleRemoveSong}
             />
-            </div>
+            </Box>
+
+
+    if(playlist.published.isPublished === true)
+    {
        
+        songCards=
+        <Box
+            style={ divStyle }
+            key={index}
+            id={'song-' + index + '-card'}
+            className={cardClass}
+
+        >
+            {index + 1}.
+            {song.title} by {song.artist}
+        </Box>
+    }
+
+
+    return (
+            
+        songCards
         
 
     );

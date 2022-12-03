@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react'
 import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
+import AuthContext from '../auth'
 
 import AddIcon from '@mui/icons-material/Add';
 import Fab from '@mui/material/Fab'
@@ -61,6 +62,7 @@ function TabPanel(props) {
 
 
 const HomeScreen = () => {
+    const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
 
     useEffect(() => {
@@ -116,26 +118,19 @@ const HomeScreen = () => {
     
     const comments = [];
     let newTextField = "";
-    if(store.currentList && store.currentList.published && store.currentList.published.isPublished)
+    if(store.listeningList && store.listeningList.published && store.listeningList.published.isPublished)
     {
         newTextField = 
         <TextField
             id = "comment-textField"
             margin="normal"
-            maxWidth
+            sx={{width:"100%"}}
             inputProps={{style: {fontSize: 48}}}
             InputLabelProps={{style: {fontSize: 24}}}
-            onKeyPress={handleKeyPress}
+            onKeyPress= {handleKeyPress}
         />
     }
-    function handleVisible(){
-        document.getElementById("Player-Tab").style.visibility = "visible";
-    }
-
-    function handleInvisible(){
-        console.log("This worked")
-        document.getElementById("Player-Tab").style.visibility = "hidden";
-    }
+   
     
     
     
@@ -143,7 +138,7 @@ const HomeScreen = () => {
     <Box id="playlist-selector">
             
             <AppBanner /> 
-            <EditToolbar>
+            <EditToolbar >
 
             </EditToolbar>
             
@@ -159,19 +154,19 @@ const HomeScreen = () => {
 
             <Box id = "list-selector-list-right" bgcolor = 'white' >
                 <Box sx={{ width: '100%', overflowX:'hidden'}}>
-                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }} >
                         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                         <Tab label="Player"  {...a11yProps(1)}/>
                         <Tab label="Comments" {...a11yProps(1)} />
                         </Tabs>
                     </Box>
-                    <TabPanel value={value} index={0} onClick= {handleVisible}>
+                    <TabPanel value={value} index={0}  >
                     <Box id = "Player-Tab" >
                             <YoutubePlaylister></YoutubePlaylister>
                      </Box>
                     </TabPanel>
                     
-                    <TabPanel value={value} index={1} onClick={handleInvisible}>
+                    <TabPanel value={value} index={1} >
                         <Box style={{border:'2px solid black', backgroundColor: 'white'}}
                         sx ={{width: 1, display:'column'}}>
                             <Box sx ={{width: 1, height: '45vh', display:'column'}}>
@@ -196,7 +191,7 @@ const HomeScreen = () => {
             <Statusbar></Statusbar>
         </Box>
 
-    if(store.currentList && store.currentList.comments )
+    if(store.listeningList && store.listeningList.comments)
     {
         homeScreen = 
         <Box id="playlist-selector">
@@ -238,7 +233,7 @@ const HomeScreen = () => {
                                     sx={{ width: '100%', bgcolor: 'background.paper', overflowY:"auto", maxHeight:'43vh'}}
                                     >
                                     {
-                                        store.currentList.comments.map((comment, index) => (
+                                        store.listeningList.comments.map((comment, index) => (
                                             <Box 
                                             style ={{backgroundColor:'#e8c205', border: '3px solid black', borderRadius:' 5px', marginBottom: '10px'}}
                                             >
@@ -255,6 +250,7 @@ const HomeScreen = () => {
                                 </List>
                             </Box>
                             <Box sx ={{bottom:'100%', width: 1}}
+                        
                             >
                                 {
                                     newTextField

@@ -13,6 +13,12 @@ import List from '@mui/material/List';
 import { Button } from '@mui/material';
 import MUIEditSongModal from './MUIEditSongModal'
 import MUIRemoveSongModal from './MUIRemoveSongModal'
+import AuthContext from '../auth'
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import Typography from '@mui/material/Typography';
+import Moment from 'moment';
+
 
 
 /*
@@ -24,6 +30,7 @@ import MUIRemoveSongModal from './MUIRemoveSongModal'
 */
 function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
     const { idNamePair, selected } = props;
@@ -36,7 +43,7 @@ function ListCard(props) {
 
         if(idNamePair.playlist.published)
         {
-            console.log(idNamePair.playlist.published)
+            //console.log(idNamePair.playlist.published)
             if(idNamePair.playlist.published.isPublished === true)
             {
                
@@ -56,15 +63,56 @@ function ListCard(props) {
             backgroundColor: 'orange'
         }
     }
+
+    if(store.listeningList !== null)
+    {
+        //console.log("I'm not sure this is working"+ JSON.stringify(idNamePair.playlist._id) + JSON.stringify(store.listeningList._id))
+        if(idNamePair.playlist._id === store.listeningList._id){
+            publishedStyle ={
+                backgroundColor: 'green'
+            }
+        }
+    }
+    let disLikeColor = {
+
+    }
+    let likeColor = {
+    }
+    if(idNamePair.playlist)
+    {
+        if(idNamePair.playlist.likesList)
+        {
+            let found = idNamePair.playlist.likesList.find(element => element ===  auth.user.email)
+                if(found === auth.user.email)
+                {
+                    likeColor = {
+                        color: 'green'
+                    }
+                }
+                else 
+                {
+                    found = idNamePair.playlist.dislikesList.find(element => element ===  auth.user.email)
+                    if(found === auth.user.email)
+                    {
+                        disLikeColor = {
+                            color: 'red'
+                        }
+                    }
+                }
+                
+            
+        }
+    }
+
     
     function handleLoadList(event, id) {
-        console.log("handleLoadList for " + id);
+        //console.log("handleLoadList for " + id);
         if (!event.target.disabled) {
             let _id = event.target.id;
             if (_id.indexOf('list-card-text-') >= 0)
                 _id = ("" + _id).substring("list-card-text-".length);
 
-            console.log("load " + event.target.id);
+            //console.log("load " + event.target.id);
 
             // CHANGE THE CURRENT LIST
             store.setCurrentList(id);
@@ -73,13 +121,13 @@ function ListCard(props) {
 
 
     function handleCloseList(event, id) {
-        console.log("handleCloseList for " + id);
+        //console.log("handleCloseList for " + id);
         if (!event.target.disabled) {
             let _id = event.target.id;
             if (_id.indexOf('list-card-text-') >= 0)
                 _id = ("" + _id).substring("list-card-text-".length);
 
-            console.log("load " + event.target.id);
+            //console.log("load " + event.target.id);
 
             // CHANGE THE CURRENT LIST
             store.closeCurrentList()
@@ -139,11 +187,46 @@ function ListCard(props) {
     else if (store.isRemoveSongModalOpen()) {
         modalJSX = <MUIRemoveSongModal />;
     }
+    function handleLikes(event, id) {
+        event.stopPropagation();
+        store.likePlaylist(idNamePair._id);
 
-    function handleDoubleClick(event) {
+    }
+    function handledisLikes(event, id) {
+        event.stopPropagation()
+        store.dislikePlaylist(idNamePair._id);
+    }
+
+    function handleDoubleClick(event,id) {
         // DOUBLE CLICK IS FOR SONG EDITING
+        
         if (event.detail === 2) {
             handleToggleEdit(event);
+        }
+        else if(event.detail ===1)
+        {
+            if(store.listeningList && store.listeningList._id !== id)
+            {
+                store.playCurrentList(id);
+            }
+            else if(store.listeningList === null)
+            {
+                store.playCurrentList(id);
+            }
+        }
+    }
+    function handleSingleClick(event,id) {
+        
+        if(event.detail ===1)
+        {
+            if(store.listeningList && store.listeningList._id !== id)
+            {
+                store.playCurrentList(id);
+            }
+            else if(store.listeningList === null)
+            {
+                store.playCurrentList(id);
+            }
         }
     }
     function handlePublish() {
@@ -157,6 +240,21 @@ function ListCard(props) {
  
         store.redo();
      }
+
+     let publishDate =""
+     if(idNamePair.playlist)
+     {
+        if(idNamePair.playlist.published)
+        {
+            if(idNamePair.playlist.published.isPublished === true)
+            {
+                publishDate = idNamePair.playlist.published.whenPublished
+                publishDate = Moment(publishDate).format("MMM Do YY");
+                
+            }
+        }
+     }
+
     //console.log(JSON.stringify(idNamePair.playlist) +" I AM GOING TO KILL MYSELFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
     let cardElement =
         <Box 
@@ -166,14 +264,15 @@ function ListCard(props) {
                 key={idNamePair._id}
                 sx={{ marginTop: '15px', display: 'flex', p: 1, border:2, borderRadius: 0, borderColor:"white" }}
                 style={{ width: '100%', fontSize: '48pt', color:"white"}}
+                
             >
-                <Box sx = {{display: 'table-column', p: 1, flexGrow: 1, width: 400, overflowY:'hidden', overflowX:'hidden' }}
-                >
+                <Box sx = {{display: 'rows', p: 1, flexGrow: 1, width: 400, overflowY:'hidden', overflowX:'hidden' }}
+                onClick={(event)=>{handleDoubleClick(event,idNamePair._id)}}>
                     <Box sx={{ p: 1, flexGrow: 1, width: 400, overflowY:'hidden', overflowX:'hidden' }}
-                    onClick={handleDoubleClick}
+                    
                     style={{fontSize:'24pt'}}>{idNamePair.name}
                     </Box>
-                    <Box style={{fontSize:'10pt'}}
+                    <Box style={{fontSize:'20pt'}}
                     Box sx={{ p: 1, flexGrow: 1, width: 400, overflowY:'hidden', overflowX:'hidden' }}>
                         by:{idNamePair.playlist.ownerUsername}  
                     </Box>
@@ -188,9 +287,81 @@ function ListCard(props) {
             
             </ListItem>
         </Box>
-    //Here make it so the list card cannot do anything
-    if(store.currentList && store.currentList.published && store.currentList.isPublished === true)
+
+    if(store.currentList!== null && store.currentList._id === idNamePair._id && store.currentList.published.isPublished == true)
     {
+        //console.log(JSON.stringify(idNamePair) + " asdaasdS"+JSON.stringify(auth.user))
+        cardElement =
+        <Box id = "list-opened"
+        style = {publishedStyle}>
+                <ListItem
+                    id={idNamePair._id}
+                    key={idNamePair._id}
+                    sx={{ marginTop: '15px', display: 'flex', p: 1, border:2, borderRadius: 0, borderColor:"white" }}
+                    style={{ width: '100%', fontSize: '48pt', color:"white"}}
+                >
+                    <Box sx = {{display: 'table-column', p: 1, flexGrow: 1, overflowY:'hidden', overflowX:'hidden' }}
+                onClick={(event)=>{handleSingleClick(event, idNamePair._id)}}>
+                    <Box>
+                    <ListItem sx={{width:'100%'}}>
+                        <Typography sx = {{width:1, overflow:'hidden'}} style ={{fontSize:'24pt'}}>{idNamePair.name}  </Typography>
+                        <IconButton sx={{float:'right', marginRight:'3px', }} style ={likeColor} onClick={(event)=>{handleLikes(event, idNamePair._id)}}><ThumbUpIcon></ThumbUpIcon><Box sx={{marginLeft:'3px', marginRight:'3px'}}>{idNamePair.playlist.likesList.length}</Box></IconButton>
+                        <IconButton sx={{float:'right', marginRight:'3px',}} style ={disLikeColor}  onClick={(event)=>{handledisLikes(event, idNamePair._id)}}><ThumbDownIcon></ThumbDownIcon><Box sx={{marginLeft:'3px', marginRight:'3px'}}>{idNamePair.playlist.dislikesList.length}</Box></IconButton>
+                    </ListItem>
+                    </Box >
+                        <Box style={{fontSize:'20pt'}}
+                        Box sx={{ p: 1, flexGrow: 1, width: 400, overflowY:'hidden', overflowX:'hidden' }}>
+                        by:{idNamePair.playlist.ownerUsername}  
+                        </Box>
+                </Box>
+     
+                    <Box sx={{ p: 1 }}>
+                    
+                    </Box>
+                
+                </ListItem>
+                <Box id = "list-Box">
+                    <List 
+                    id="playlist-cards" 
+                    sx={{ width: '100%', bgcolor: 'background.paper'}}
+                    >
+                    {
+                        store.currentList.songs.map((song, index) => (
+                            <SongCard
+                                id={'playlist-song-' + (index)}
+                                key={'playlist-song-' + (index)}
+                                index={index}
+                                song={song}
+                                playlist={store.currentList}
+                            />
+                        ))  
+                    }
+                    </List>
+                    
+                </Box>
+                <Box id = "fixed-Bottom">  
+                    <ListItem >
+
+                            <Typography sx = {{width:200, overflow:'hidden', flexGrow: 1}} style ={{fontSize:'12pt', color:'green'}}>Published: {publishDate}</Typography>
+                            <Typography sx = {{width:200, overflow:'hidden', flexGrow: 1}} style ={{fontSize:'12pt', color: 'red'}}>Listens: {idNamePair.playlist.listens}</Typography>
+
+                            <Button class= "insideButtons" onClick={(event) => {
+                                handleDeleteList(event, idNamePair._id)
+                            }}
+                            disabled ={ (auth.user.email === idNamePair.ownerEmail)}>Delete</Button>
+                            <Button class="insideButtons" >Duplicate</Button>
+                            <IconButton onClick={(event) => {
+                                handleCloseList(event, idNamePair._id)
+                            }}>
+                            <KeyboardDoubleArrowUpIcon style={{fontSize:'20pt'}} />
+                            </IconButton>
+                    </ListItem>
+                </Box> 
+                { modalJSX }
+        </Box>
+    }
+    else if(idNamePair.playlist.published.isPublished === true){
+        console.log(JSON.stringify(idNamePair))
         cardElement =
         <Box 
         style = {publishedStyle}>
@@ -199,17 +370,24 @@ function ListCard(props) {
                 key={idNamePair._id}
                 sx={{ marginTop: '15px', display: 'flex', p: 1, border:2, borderRadius: 0, borderColor:"white" }}
                 style={{ width: '100%', fontSize: '48pt', color:"white"}}
+                
             >
-                <Box sx = {{display: 'table-column', p: 1, flexGrow: 1, width: 400, overflowY:'hidden', overflowX:'hidden' }}
-                >
-                    <Box sx={{ p: 1, flexGrow: 1, width: 400, overflowY:'hidden', overflowX:'hidden' }}
-                    onClick={handleDoubleClick}
-                    style={{fontSize:'24pt'}}>{idNamePair.name}
+                <Box sx = {{flexDirection:'column', p: 1, flexGrow: 1, overflowY:'hidden', overflowX:'hidden' }}
+                onClick={(event)=>{handleSingleClick(event,idNamePair._id)}}>
+                     <ListItem sx={{width: 1, flexGrow: 1, height:'4vh'}} >
+                        <Typography sx = {{width:400, overflow:'hidden', flexGrow: 1}} style ={{fontSize:'24pt'}}>{idNamePair.name}  </Typography>
+                        <IconButton sx={{float:'right', marginRight:'3px', flexGrow: 1}} onClick={(event)=>{handleLikes(event, idNamePair._id)}} style={likeColor}><ThumbUpIcon></ThumbUpIcon><Box sx={{marginLeft:'3px', marginRight:'3px'}}>{idNamePair.playlist.likesList.length}</Box></IconButton>
+                        <IconButton sx={{float:'right', marginRight:'3px', flexGrow: 1}} onClick={(event)=>{handledisLikes(event, idNamePair._id)}}style={disLikeColor}><ThumbDownIcon></ThumbDownIcon><Box sx={{marginLeft:'3px', marginRight:'3px'}}>{idNamePair.playlist.dislikesList.length}</Box></IconButton>
+                    </ListItem>
+                    <Box style={{fontSize:'20pt'}}
+                    sx={{ p: 1, flexGrow: 1, width: 400, overflowY:'hidden', overflowX:'hidden' }}  >
+                        by:{idNamePair.playlist.ownerUsername}  
                     </Box>
-                    <Box style={{fontSize:'10pt'}}
-                    Box sx={{ p: 1, flexGrow: 1, width: 400, overflowY:'hidden', overflowX:'hidden' }}>
-                    by:{idNamePair.playlist.ownerUsername}  
-                </Box>
+                    <ListItem>
+                        <Typography sx = {{width:400, overflow:'hidden', flexGrow: 1}} style ={{fontSize:'12pt', color:'green'}}>Published: {publishDate}</Typography>
+                        <Typography sx = {{width:400, overflow:'hidden', flexGrow: 1}} style ={{fontSize:'12pt', color:'red'}}>Listens: {idNamePair.playlist.listens}</Typography>
+                    </ListItem>
+                    
                 </Box>
                 <Box sx={{ p: 1 }}>
                     <IconButton onClick={(event) => {
@@ -218,47 +396,11 @@ function ListCard(props) {
                     <KeyboardDoubleArrowDownIcon style={{fontSize:'24pt'}} />
                 </IconButton>
                 </Box>
+
+
             
             </ListItem>
         </Box>
-    }
-    else
-    if (editActive) {
-        cardElement =
-        <Box >
-            <ListItem
-                id={idNamePair._id}
-                key={idNamePair._id}
-                sx={{ marginTop: '15px', display: 'flex', p: 1, border:2, borderRadius: 0, borderColor:"white" }}
-                style={{ width: '100%', fontSize: '48pt', color:"white"}}
-            >
-                <TextField
-                margin="normal"
-                required
-                style = {{width: 400}}
-                id={"list-" + idNamePair._id}
-                label="Playlist Name"
-                name="name"
-                autoComplete="Playlist Name"
-                className='list-card'
-                onKeyPress={handleKeyPress}
-                onChange={handleUpdateText}
-                defaultValue={idNamePair.name}
-                inputProps={{style: {fontSize: 48}}}
-                InputLabelProps={{style: {fontSize: 24}}}
-                autoFocus
-            />
-                <Box sx={{ p: 1 }}>
-                    <IconButton onClick={(event) => {
-                    handleLoadList(event, idNamePair._id)
-                }}>
-                    <KeyboardDoubleArrowDownIcon style={{fontSize:'24pt'}} />
-                </IconButton>
-                </Box>
-            
-            </ListItem>
-        </Box>
-            
     }
     else
     if(store.currentList!== null && store.currentList._id === idNamePair._id)
@@ -272,15 +414,11 @@ function ListCard(props) {
                     key={idNamePair._id}
                     sx={{ marginTop: '15px', display: 'flex', p: 1, border:2, borderRadius: 0, borderColor:"white" }}
                     style={{ width: '100%', fontSize: '48pt', color:"white"}}
-                    // button
-                    // onClick={(event) => {
-                    //     handleLoadList(event, idNamePair._id)
-                    // }}
                 >
                     <Box sx = {{display: 'table-column', p: 1, flexGrow: 1, width: 400, overflowY:'hidden', overflowX:'hidden' }}
-                >
+                onClick={(event)=>{handleDoubleClick(event,idNamePair._id)}}>
                     <Box sx={{ p: 1, flexGrow: 1, width: 400, overflowY:'hidden', overflowX:'hidden' }}
-                    onClick={handleDoubleClick}
+                    
                     style={{fontSize:'24pt'}}>{idNamePair.name}
                     </Box>
                         <Box style={{fontSize:'10pt'}}
@@ -288,24 +426,9 @@ function ListCard(props) {
                         by:{idNamePair.playlist.ownerUsername}  
                         </Box>
                 </Box>
-                    {/* <Box sx={{ p: 1 }}>
-                        <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                            <EditIcon style={{fontSize:'48pt'}} />
-                        </IconButton>
-                    </Box> */}
+     
                     <Box sx={{ p: 1 }}>
-                    {/* <IconButton onClick={(event) => {
-                        handleCloseList(event, idNamePair._id)
-                    }}>
-                        <KeyboardDoubleArrowUpIcon style={{fontSize:'24pt'}} />
-                    </IconButton> */}
-
                     
-                        {/* <IconButton onClick={(event) => {
-                                handleDeleteList(event, idNamePair._id)
-                            }} aria-label='delete'>
-                            <KeyboardDoubleArrowDownIcon style={{fontSize:'48pt'}} />
-                        </IconButton> */}
                     </Box>
                 
                 </ListItem>
@@ -337,7 +460,7 @@ function ListCard(props) {
                             <Button class= "insideButtons" onClick={(event) => {
                                 handleDeleteList(event, idNamePair._id)
                             }}>Delete</Button>
-                            <Button class="insideButtons" onClick={handleAddNewSong}>Duplicate</Button>
+                            <Button class="insideButtons" >Duplicate</Button>
                             <IconButton onClick={(event) => {
                                 handleCloseList(event, idNamePair._id)
                             }}>
@@ -348,6 +471,43 @@ function ListCard(props) {
                 { modalJSX }
         </Box>
 
+    }
+    if (editActive) {
+        cardElement =
+        <Box >
+            <ListItem
+                id={idNamePair._id}
+                key={idNamePair._id}
+                sx={{ marginTop: '15px', display: 'flex', p: 1, border:2, borderRadius: 0, borderColor:"white" }}
+                style={{ width: '100%', fontSize: '48pt', color:"white"}}
+            >
+                <TextField
+                margin="normal"
+                required
+                style = {{width: 400}}
+                id={"list-" + idNamePair._id}
+                label="Playlist Name"
+                name="name"
+                autoComplete="Playlist Name"
+                className='list-card'
+                onKeyPress={handleKeyPress}
+                onChange={handleUpdateText}
+                defaultValue={idNamePair.name}
+                inputProps={{style: {fontSize: 48}}}
+                InputLabelProps={{style: {fontSize: 24}}}
+                autoFocus
+            />
+                {/* <Box sx={{ p: 1 }}>
+                    <IconButton onClick={(event) => {
+                    handleLoadList(event, idNamePair._id)
+                }}>
+                    <KeyboardDoubleArrowDownIcon style={{fontSize:'24pt'}} />
+                </IconButton>
+                </Box> */}
+            
+            </ListItem>
+        </Box>
+            
     }
     return (
         cardElement

@@ -17,6 +17,7 @@ export default function YoutubePlaylister() {
     // DEMONSTRATES HOW TO IMPLEMENT A PLAYLIST THAT MOVES
     // FROM ONE SONG TO THE NEXT
     const [player, setPlayer] = useState("")
+
     // const [songNub, setSongNumb] = useState(0);
     // const [title, setTitle] = useState("");
     // const [artist, setArtist] = useState("");
@@ -29,24 +30,24 @@ export default function YoutubePlaylister() {
 
     // THIS HAS THE YOUTUBE IDS FOR THE SONGS IN OUR PLAYLIST
     let playlist = [];
-    if(store.currentList)
+    if(store.listeningList)
     {
-        if(store.currentList.songs)
+        if(store.listeningList.songs)
         {
-            for(let i =0; i<store.currentList.songs.length; i++)
+            for(let i =0; i<store.listeningList.songs.length; i++)
             {
-                playlist.push(store.currentList.songs[i].youTubeId);
+                playlist.push(store.listeningList.songs[i].youTubeId);
             }
         }
     }
     let songs = [];
-    if(store.currentList)
+    if(store.listeningList)
     {
-        if(store.currentList.songs)
+        if(store.listeningList.songs)
         {
-            for(let i =0; i<store.currentList.songs.length; i++)
+            for(let i =0; i<store.listeningList.songs.length; i++)
             {
-                songs.push(store.currentList.songs[i]);
+                songs.push(store.listeningList.songs[i]);
             }
         }
     }
@@ -72,7 +73,7 @@ export default function YoutubePlaylister() {
             // setSongNumb(currentSong + 1);
             // setTitle(songs[currentSong].title)
             // setArtist(songs[currentSong].artist)
-            document.getElementById("playlistName").innerHTML = "Playlist: "+ (store.currentList.name);
+            document.getElementById("playlistName").innerHTML = "Playlist: "+ (store.listeningList.name);
             document.getElementById("songNumber").innerHTML = "Song #: "+ (currentSong +1);
             document.getElementById("titleName").innerHTML = "Title: "+ songs[currentSong].title;
             document.getElementById("artistName").innerHTML = "Artist: "+ songs[currentSong].artist;
@@ -179,7 +180,7 @@ function onPlayerReady(event) {
     let youtubePlayer ="";
     if(playlist.length > 0)
     {
-        console.log("this is happening")
+        //console.log("this is happening")
         youtubePlayer = 
             <Box  >
                 <Box sx = {{pointerEvents:'none'}}>
@@ -216,7 +217,7 @@ function onPlayerReady(event) {
     {
         youtubePlayer = 
             <Box>
-                No playlistSelected
+                No songs
             </Box>
     }
 
