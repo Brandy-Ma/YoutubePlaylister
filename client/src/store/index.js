@@ -7,7 +7,7 @@ import MoveSong_Transaction from '../transactions/MoveSong_Transaction'
 import RemoveSong_Transaction from '../transactions/RemoveSong_Transaction'
 import UpdateSong_Transaction from '../transactions/UpdateSong_Transaction'
 import AuthContext from '../auth'
-import { FoundationTwoTone, PlaylistPlay } from '@mui/icons-material'
+
 /*
     This is our global data store. Note that it uses the Flux design pattern,
     which makes use of things like actions and reducers. 
@@ -29,7 +29,9 @@ export const GlobalStoreActionType = {
     MARK_LIST_FOR_DELETION: "MARK_LIST_FOR_DELETION",
     SET_CURRENT_LIST: "SET_CURRENT_LIST",
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
+    SET_CURRENT_VIEW: "SET_CURRENT_VIEW",
     LIKING_SONG:"SET_LIKING_SONG",
+    SEARCHING:"SET_SEARCHING",
     PUBLISH_PLAYLIST: "PUBLISH_PLAYLIST",
     PLAY_CURRENT_LIST: "PLAY_CURRENT_LIST",
     EDIT_SONG: "EDIT_SONG",
@@ -58,6 +60,7 @@ function GlobalStoreContextProvider(props) {
         currentSongIndex : -1,
         currentSong : null,
         newListCounter: 0,
+        currentView: "home",
         listNameActive: false,
         listIdMarkedForDeletion: null,
         listMarkedForDeletion: null,
@@ -84,6 +87,7 @@ function GlobalStoreContextProvider(props) {
                     currentList: null,
                     currentSongIndex: -1,
                     currentSong: null,
+                    currentView: store.currentView,
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
@@ -99,6 +103,7 @@ function GlobalStoreContextProvider(props) {
                     currentList: null,
                     currentSongIndex: -1,
                     currentSong: null,
+                    currentView: store.currentView,
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
@@ -114,6 +119,7 @@ function GlobalStoreContextProvider(props) {
                     currentList: payload,
                     currentSongIndex: -1,
                     currentSong: null,
+                    currentView: store.currentView,
                     newListCounter: store.newListCounter + 1,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
@@ -129,6 +135,7 @@ function GlobalStoreContextProvider(props) {
                     currentList: null,
                     currentSongIndex: -1,
                     currentSong: null,
+                    currentView: "home",
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
@@ -143,6 +150,22 @@ function GlobalStoreContextProvider(props) {
                     currentList: store.currentList,
                     currentSongIndex: -1,
                     currentSong: null,
+                    currentView: store.currentView,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    listeningList: store.listeningList
+                });
+            }
+            case GlobalStoreActionType.SEARCHING: {
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: payload,
+                    currentList: store.currentList,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    currentView: store.currentView,
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
@@ -158,6 +181,7 @@ function GlobalStoreContextProvider(props) {
                     currentList: null,
                     currentSongIndex: -1,
                     currentSong: null,
+                    currentView: store.currentView,
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: payload.id,
@@ -173,6 +197,7 @@ function GlobalStoreContextProvider(props) {
                     currentList: payload,
                     currentSongIndex: -1,
                     currentSong: null,
+                    currentView: store.currentView,
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
@@ -188,6 +213,7 @@ function GlobalStoreContextProvider(props) {
                     currentList: payload,
                     currentSongIndex: -1,
                     currentSong: null,
+                    currentView: store.currentView,
                     newListCounter: store.newListCounter,
                     listNameActive: true,
                     listIdMarkedForDeletion: null,
@@ -202,6 +228,7 @@ function GlobalStoreContextProvider(props) {
                     currentList: store.currentList,
                     currentSongIndex: -1,
                     currentSong: store.currentSong,
+                    currentView: store.currentView,
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
@@ -216,6 +243,7 @@ function GlobalStoreContextProvider(props) {
                     currentList: store.currentList,
                     currentSongIndex: payload.currentSongIndex,
                     currentSong: payload.currentSong,
+                    currentView: store.currentView,
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
@@ -230,6 +258,7 @@ function GlobalStoreContextProvider(props) {
                     currentList: store.currentList,
                     currentSongIndex: payload.currentSongIndex,
                     currentSong: payload.currentSong,
+                    currentView: store.currentView,
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
@@ -244,6 +273,7 @@ function GlobalStoreContextProvider(props) {
                     currentList: store.currentList,
                     currentSongIndex: -1,
                     currentSong: null,
+                    currentView: store.currentView,
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
@@ -254,15 +284,31 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.PLAY_CURRENT_LIST: {
                 return setStore({
                     currentModal : CurrentModal.NONE,
-                    idNamePairs: payload.idPairs,
+                    idNamePairs: store.idNamePairs,
                     currentList: store.currentList,
                     currentSongIndex: payload.list.currentSongIndex,
                     currentSong: payload.list.currentSong,
+                    currentView: store.currentView,
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
                     listeningList: payload.list,
+                });
+            }
+            case GlobalStoreActionType.SET_CURRENT_VIEW: {
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: [],
+                    currentList: store.currentList,
+                    currentSongIndex: store.currentSongIndex,
+                    currentSong: store.currentSong,
+                    currentView: payload,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    listeningList: store.listeningList,
                 });
             }
             default:
@@ -445,6 +491,14 @@ function GlobalStoreContextProvider(props) {
     store.isRemoveSongModalOpen = () => {
         return store.currentModal === CurrentModal.REMOVE_SONG;
     }
+    store.updateView = function (viewString){
+        storeReducer({
+            type: GlobalStoreActionType.SET_CURRENT_VIEW,
+            payload: viewString
+        });
+        history.push("/login/");
+        history.push("/");
+    }
 
     // THE FOLLOWING 8 FUNCTIONS ARE FOR COORDINATING THE UPDATING
     // OF A LIST, WHICH INCLUDES DEALING WITH THE TRANSACTION STACK. THE
@@ -464,6 +518,7 @@ function GlobalStoreContextProvider(props) {
                         payload: playlist
                     });
                     
+
                     //history.push("/playlist/" + playlist._id);
                 }
             }
@@ -668,6 +723,7 @@ function GlobalStoreContextProvider(props) {
                             type: GlobalStoreActionType.PLAY_CURRENT_LIST,
                             payload: {list:playlist , idPairs:pairsArray}
                         });
+                        
                     }
                 }
                 asyncgetListPairs(playlist);
@@ -691,7 +747,7 @@ function GlobalStoreContextProvider(props) {
                     playlist.likesList.push(auth.user.email);
                 }
                 
-                let disLikeFound = playlist.dislikesList.find(element => element == auth.user.email)
+                let disLikeFound = playlist.dislikesList.find(element => element === auth.user.email)
                 if(disLikeFound)
                 {
                     playlist.dislikesList = playlist.dislikesList.filter(element => element !== auth.user.email)
@@ -734,7 +790,7 @@ function GlobalStoreContextProvider(props) {
                 {
                     playlist.dislikesList.push(auth.user.email);
                 }
-                let likeFound = playlist.likesList.find(element => element == auth.user.email)
+                let likeFound = playlist.likesList.find(element => element === auth.user.email)
                 if(likeFound)
                 {
                     playlist.likesList = playlist.likesList.filter(element => element !== auth.user.email)
@@ -745,10 +801,9 @@ function GlobalStoreContextProvider(props) {
                     async function asyncLoadIdNamePairs() {
                         response = await api.getPlaylistPairs();
                         if (response.data.success) {
-                            let pairsArray = response.data.idNamePairs;
                             storeReducer({
                                 type: GlobalStoreActionType.LIKING_SONG,
-                                payload: pairsArray
+                                payload: response.data.idNamePairs
                             });
                         }
                         else {
@@ -794,21 +849,100 @@ function GlobalStoreContextProvider(props) {
         }
         asyncPlayCurrentList(id);
     }
-    // function KeyPress(event){
-    //     if(event.ctrlKey && !store.modalOpen)
-    //     {
-    //         if(event.key === 'z')
-    //         {
-    //             store.undo();
-    //         }
-    //         else if(event.key === 'y')
-    //         {
-    //             store.redo();
-    //         }
-    //     }
+    store.loadIdPairsSearch = function(){
+        let keyWord = document.getElementById("search-textField").value.trim()
+        async function asyncGetAllPlaylist() {
+            let response = await api.getAllPlaylist();
+            
+            if (response.data.success) {   
+                let playlists = response.data.data
+               
+                let pairs = [];
+                for (let key in playlists) {
+                    let list = playlists[key];
+                    if((list.published.isPublished === true) && list.name.includes(keyWord) && keyWord !=="")
+                    {
+                        let pair = {
+                            _id: list._id,
+                            name: list.name,
+                            playlist: list
+                        };
+                        pairs.push(pair);
+                    }
+                }
+                storeReducer({
+                        type: GlobalStoreActionType.SEARCHING,
+                        payload: pairs
+                    });
+                
+            }
+        }
+        asyncGetAllPlaylist();
         
-    // }
-    // document.onkeydown = (e) => KeyPress(e);
+        //get all playists
+        // filter then use those namepairs
+    }
+
+    store.loadIdPairsSearchUser = function(){
+        let keyWord = document.getElementById("search-textField").value.trim()
+        async function asyncGetAllPlaylist() {
+            let response = await api.getAllPlaylist();
+            
+            if (response.data.success) {   
+                    console.log("HERE I AM")
+                    let playlists = response.data.data
+                    let pairs = [];
+                    for (let key in playlists) {
+                        let list = playlists[key];
+                        console.log(JSON.stringify(list.ownerUsername)+"vasdawasd")
+                        if((list.published.isPublished === true) && list.ownerUsername.includes(keyWord) && keyWord !=="")
+                        {
+                            let pair = {
+                                _id: list._id,
+                                name: list.name,
+                                playlist: list
+                            };
+                            pairs.push(pair);
+                        }
+                    }
+                    storeReducer({
+                            type: GlobalStoreActionType.SEARCHING,
+                            payload: pairs
+                        });
+                    }
+            }  
+            asyncGetAllPlaylist();
+        }
+
+        store.loadIdNamePairsHomeSearch = function(){
+            let keyWord = document.getElementById("search-textField").value.trim()
+            async function asyncGetAllPlaylist() {
+                let response = await api.getAllPlaylist();
+                
+                if (response.data.success) {   
+                        console.log("HERE I AM")
+                        let playlists = response.data.data
+                        let pairs = [];
+                        for (let key in playlists) {
+                            let list = playlists[key];
+                            if(list.ownerEmail === auth.user.email && list.name.includes(keyWord) && keyWord !=="")
+                            {
+                                let pair = {
+                                    _id: list._id,
+                                    name: list.name,
+                                    playlist: list
+                                };
+                                pairs.push(pair);
+                            }
+                        }
+                        storeReducer({
+                                type: GlobalStoreActionType.SEARCHING,
+                                payload: pairs
+                            });
+                        }
+                }  
+                asyncGetAllPlaylist();
+            }
 
     // THIS FUNCTION ENABLES THE PROCESS OF EDITING A LIST NAME
     store.setIsListNameEditActive = function (currentPlaylist) {

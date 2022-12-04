@@ -181,11 +181,22 @@ getPlaylists = async (req, res) => {
         if(err) {
             return res.status(400).json({success:false, err:err})
         }
-        if(!playlist.length){
+        if(!playlists.length){
             return res.status(404)
             .json({sucess:false, error: 'Playlists not found'})
         }
-        return res.status(200).json({success:true, data:playlists})
+        let pairs = [];
+            for (let key in playlists) {
+                let list = playlists[key];
+                let pair = {
+                    _id: list._id,
+                    name: list.name,
+                    playlist: list
+                };
+                pairs.push(pair);
+            }
+
+        return res.status(200).json({success:true, data:playlists, idNamePairs: pairs})
     }).catch(err => console.log(err))
 }
 updatePlaylist = async (req, res) => {

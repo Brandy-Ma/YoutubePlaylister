@@ -17,7 +17,6 @@ import AuthContext from '../auth'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import Typography from '@mui/material/Typography';
-import Moment from 'moment';
 
 
 
@@ -64,10 +63,10 @@ function ListCard(props) {
         }
     }
 
-    if(store.listeningList !== null)
+    if(store.listeningList)
     {
         //console.log("I'm not sure this is working"+ JSON.stringify(idNamePair.playlist._id) + JSON.stringify(store.listeningList._id))
-        if(idNamePair.playlist._id === store.listeningList._id){
+        if(idNamePair.playlist &&idNamePair.playlist._id && (idNamePair.playlist._id === store.listeningList._id)){
             publishedStyle ={
                 backgroundColor: 'green'
             }
@@ -204,7 +203,8 @@ function ListCard(props) {
             handleToggleEdit(event);
         }
         else if(event.detail ===1)
-        {
+        { 
+            console.log("here")
             if(store.listeningList && store.listeningList._id !== id)
             {
                 store.playCurrentList(id);
@@ -248,8 +248,8 @@ function ListCard(props) {
         {
             if(idNamePair.playlist.published.isPublished === true)
             {
-                publishDate = idNamePair.playlist.published.whenPublished
-                publishDate = Moment(publishDate).format("MMM Do YY");
+
+                publishDate = new Date(idNamePair.playlist.published.whenPublished).toLocaleDateString("en-US",{ year: "numeric", month: "long", day: "numeric" })
                 
             }
         }

@@ -23,16 +23,17 @@ function EditToolbar() {
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
 
-    function handleAddNewSong() {
-
+    function handleAllListview() {
+        store.updateView("allList")
         // store.addNewSong();
     }
-    function handleUndo() {
-
+    function handleUsersview() {
+        store.updateView("users")
        // store.undo();
     }
-    function handleRedo() {
-
+    function handleHomeview() {
+        store.updateView("home")
+        store.loadIdNamePairs()
        // store.redo();
     }
     const handleOpenSortByMenu = (event) => {
@@ -45,7 +46,9 @@ function EditToolbar() {
         setAnchorEl(null);
     };
 
-    const handleLogout = () => {
+    const handleLogout = (event) => {
+        event.stopPropagation();
+        
         // handleMenuClose();
         // store.closeCurrentList();
         // auth.logoutUser();
@@ -54,23 +57,16 @@ function EditToolbar() {
     const sortMenu = 
             <Menu
                 anchorEl={anchorEl}
-                anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
                 id='sort-by-menu'
                 keepMounted
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
+                
                 open={isMenuOpen}
                 onClose={handleMenuClose}
             >
-                <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                <MenuItem onClick={handleLogout}>Name(A-Z)</MenuItem>
+                <MenuItem onClick={handleLogout}>Publish Date (Newest)</MenuItem>
+                <MenuItem onClick={handleLogout}>Listens(High-Low)</MenuItem>
+                <MenuItem onClick={handleLogout}>DisLikes(High-Low)</MenuItem>
             </Menu>    
 
             const buttonClass = {
@@ -81,14 +77,45 @@ function EditToolbar() {
                 marginRight: '5px',
                 transform: 'scale(2)'
             }
+    
+    function handleKeyPress(event) {
+        if (event.code === "Enter") {
+            if(store.currentView ==='users')
+            {
+                store.loadIdPairsSearchUser();
+            }
+            else if(store.currentView ==='allList')
+            {
+                store.loadIdPairsSearch();
+            }
+            else{
+                store.loadIdNamePairsHomeSearch()
+            }
+            
 
+        }
+    }
+
+
+    let searchTextField ="";
+      
+
+        searchTextField = 
+        <TextField
+            id="search-textField"
+            label="Search field"
+            type="search"
+            variant="filled"
+            sx = {{width:'70ch', marginRight: '10px', m: 1, height:"auto" }}
+            onKeyPress= {handleKeyPress}
+        />
 
     return (
         <Box id="edit-toolbar">
 
             <IconButton
                 disabled={false}
-                onClick={handleAddNewSong}
+                onClick={handleHomeview}
                 class = "editToolbar-button"
                 sx ={buttonClass}
                 >
@@ -97,7 +124,7 @@ function EditToolbar() {
             
             <IconButton 
                 disabled={false}
-                onClick={handleUndo}
+                onClick={handleAllListview}
                 class = "editToolbar-button"
                 sx ={buttonClass}
                 >   
@@ -106,7 +133,7 @@ function EditToolbar() {
 
             <IconButton 
                 disabled={false}
-                onClick={handleRedo}
+                onClick={handleUsersview}
                 class = "editToolbar-button"
                 sx ={buttonClass}
                 >
@@ -132,14 +159,7 @@ function EditToolbar() {
                 Sort By
             </Box>
             <Box id = "search-field">
-            <TextField
-            id="search-textField"
-            label="Search field"
-            type="search"
-            variant="filled"
-            sx = {{width:'70ch', marginRight: '10px', m: 1 }}
-            />
-            {/* backgroundColor:'white' */}
+            {searchTextField}
             </Box>
         </Box>
     )

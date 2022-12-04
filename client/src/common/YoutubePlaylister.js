@@ -114,7 +114,6 @@ function onPlayerReady(event) {
     // player = event.target
     setPlayer(event.target)
     loadAndPlayCurrentSong(event.target);
-    event.target.playVideo();
 }
 
     // THIS IS OUR EVENT HANDLER FOR WHEN THE YOUTUBE PLAYER'S STATE
@@ -128,7 +127,6 @@ function onPlayerReady(event) {
         if (playerStatus === -1) {
             // VIDEO UNSTARTED
             console.log("-1 Video unstarted");
-            player.playVideo()
         } else if (playerStatus === 0) {
             // THE VIDEO HAS COMPLETED PLAYING
             console.log("0 Video ended");

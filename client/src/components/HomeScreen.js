@@ -74,6 +74,7 @@ const HomeScreen = () => {
     }
     let listCard = "";
     if (store) {
+        
         listCard = 
             <List sx={{ width: '99%', left: '0%', background:'transparent' }}>
             {
@@ -193,6 +194,7 @@ const HomeScreen = () => {
 
     if(store.listeningList && store.listeningList.comments)
     {
+        console.log(JSON.stringify(store.idNamePair) + "THIS IS OFF RENDER")
         homeScreen = 
         <Box id="playlist-selector">
             <AppBanner /> 
@@ -250,7 +252,6 @@ const HomeScreen = () => {
                                 </List>
                             </Box>
                             <Box sx ={{bottom:'100%', width: 1}}
-                        
                             >
                                 {
                                     newTextField
