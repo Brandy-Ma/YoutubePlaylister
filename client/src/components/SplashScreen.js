@@ -1,6 +1,14 @@
 import { AlertTitle, Button, Collapse } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { GlobalStoreContext } from '../store'
+import { useContext } from 'react'
 export default function SplashScreen() {
+    const { store } = useContext(GlobalStoreContext);
+    function handleGuestClicked(){
+        store.setGuest();
+    }
+
+
     return (
         
         <div id="splash-screen">
@@ -21,7 +29,7 @@ export default function SplashScreen() {
             <Button 
                 variant="contained"
                 size = "large"
-                sx = {{margin: 2, top: 50}}>Guest</Button>
+                sx = {{margin: 2, top: 50}} onClick={handleGuestClicked} to='/'>Guest</Button>
             <div id= "madeBy">Made by: Brandy Ma</div>
         </div>
 

@@ -82,6 +82,11 @@ export default function AppBanner() {
             //editToolbar = <EditToolbar />;
         }
     }
+    const playlistStyle = {
+        textDecoration: 'none', 
+        color: 'red', 
+        fontFamily: 'Statisfy'
+    }
     
     function getAccountMenu(loggedIn) {
         let userInitials = auth.getUserInitials();
@@ -93,16 +98,17 @@ export default function AppBanner() {
     }
 
     return (
-        <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static" height = "10%">
+        <Box sx={{ flexGrow: 1 }} >
+            <AppBar position="static" height = "10%" style={{backgroundColor:'#8C8B8C'}}>
                 <Toolbar>
                     <Typography                        
                         variant="h4"
                         noWrap
                         component="div"
-                        sx={{ display: { xs: 'none', sm: 'block' } }}                        
+                        sx={{ display: { xs: 'none', sm: 'block',  } }}    
+                        style = {{fontFamily:"'Satisfy', cursive"}}                    
                     >
-                        <Link style={{ textDecoration: 'none', color: 'white' }} to='/'>Playlister</Link>
+                        <Link style={{ textDecoration: 'none', color: '#020DA8', }} sx ={{fontFamily:"'Satisfy', cursive"}}to='/'>Playlister</Link>
                     </Typography>
                     <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>

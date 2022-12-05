@@ -53,13 +53,15 @@ function ListCard(props) {
 
     if(isPublished === true){
         publishedStyle ={
-            backgroundColor: 'pink'
+            backgroundColor: '#92A5DE',
+            color:"black"
         }
     }
     else
     {
         publishedStyle ={
-            backgroundColor: 'orange'
+            backgroundColor: '#F0F2DA',
+            color:"black"
         }
     }
 
@@ -68,7 +70,7 @@ function ListCard(props) {
         //console.log("I'm not sure this is working"+ JSON.stringify(idNamePair.playlist._id) + JSON.stringify(store.listeningList._id))
         if(idNamePair.playlist &&idNamePair.playlist._id && (idNamePair.playlist._id === store.listeningList._id)){
             publishedStyle ={
-                backgroundColor: 'green'
+                backgroundColor: '#DEBD52'
             }
         }
     }
@@ -77,32 +79,34 @@ function ListCard(props) {
     }
     let likeColor = {
     }
-    if(idNamePair.playlist)
+    if(auth.loggedin===true)
     {
-        if(idNamePair.playlist.likesList)
+        if(idNamePair.playlist)
         {
-            let found = idNamePair.playlist.likesList.find(element => element ===  auth.user.email)
-                if(found === auth.user.email)
-                {
-                    likeColor = {
-                        color: 'green'
-                    }
-                }
-                else 
-                {
-                    found = idNamePair.playlist.dislikesList.find(element => element ===  auth.user.email)
+            if(idNamePair.playlist.likesList)
+            {
+                let found = idNamePair.playlist.likesList.find(element => element ===  auth.user.email)
                     if(found === auth.user.email)
                     {
-                        disLikeColor = {
-                            color: 'red'
+                        likeColor = {
+                            color: 'green'
                         }
                     }
-                }
+                    else 
+                    {
+                        found = idNamePair.playlist.dislikesList.find(element => element ===  auth.user.email)
+                        if(found === auth.user.email)
+                        {
+                            disLikeColor = {
+                                color: 'red'
+                            }
+                        }
+                    }
+                    
                 
-            
+            }
         }
     }
-
     
     function handleLoadList(event, id) {
         //console.log("handleLoadList for " + id);
@@ -240,7 +244,11 @@ function ListCard(props) {
  
         store.redo();
      }
-
+     function handleDuplicate(event) {
+        event.stopPropagation();
+        store.duplicatePlaylist(idNamePair._id);
+        
+     }
      let publishDate =""
      if(idNamePair.playlist)
      {
@@ -270,10 +278,10 @@ function ListCard(props) {
                 onClick={(event)=>{handleDoubleClick(event,idNamePair._id)}}>
                     <Box sx={{ p: 1, flexGrow: 1, width: 400, overflowY:'hidden', overflowX:'hidden' }}
                     
-                    style={{fontSize:'24pt'}}>{idNamePair.name}
+                    style={{fontSize:'24pt', color:'black'}}>{idNamePair.name}
                     </Box>
                     <Box style={{fontSize:'20pt'}}
-                    Box sx={{ p: 1, flexGrow: 1, width: 400, overflowY:'hidden', overflowX:'hidden' }}>
+                    Box sx={{ p: 1, flexGrow: 1, width: 400, overflowY:'hidden', overflowX:'hidden', color:'black'}}>
                         by:{idNamePair.playlist.ownerUsername}  
                     </Box>
                 </Box>
@@ -304,13 +312,13 @@ function ListCard(props) {
                 onClick={(event)=>{handleSingleClick(event, idNamePair._id)}}>
                     <Box>
                     <ListItem sx={{width:'100%'}}>
-                        <Typography sx = {{width:1, overflow:'hidden'}} style ={{fontSize:'24pt'}}>{idNamePair.name}  </Typography>
-                        <IconButton sx={{float:'right', marginRight:'3px', }} style ={likeColor} onClick={(event)=>{handleLikes(event, idNamePair._id)}}><ThumbUpIcon></ThumbUpIcon><Box sx={{marginLeft:'3px', marginRight:'3px'}}>{idNamePair.playlist.likesList.length}</Box></IconButton>
-                        <IconButton sx={{float:'right', marginRight:'3px',}} style ={disLikeColor}  onClick={(event)=>{handledisLikes(event, idNamePair._id)}}><ThumbDownIcon></ThumbDownIcon><Box sx={{marginLeft:'3px', marginRight:'3px'}}>{idNamePair.playlist.dislikesList.length}</Box></IconButton>
+                        <Typography sx = {{width:1, overflow:'hidden'}} style ={{fontSize:'24pt', color:'black'}}>{idNamePair.name}  </Typography>
+                        <IconButton disabled={(auth.loggedIn===false)} sx={{float:'right', marginRight:'3px', }} style ={likeColor} onClick={(event)=>{handleLikes(event, idNamePair._id)}}><ThumbUpIcon></ThumbUpIcon><Box sx={{marginLeft:'3px', marginRight:'3px'}}>{idNamePair.playlist.likesList.length}</Box></IconButton>
+                        <IconButton disabled={(auth.loggedIn===false)} sx={{float:'right', marginRight:'3px',}} style ={disLikeColor}  onClick={(event)=>{handledisLikes(event, idNamePair._id)}}><ThumbDownIcon></ThumbDownIcon><Box sx={{marginLeft:'3px', marginRight:'3px'}}>{idNamePair.playlist.dislikesList.length}</Box></IconButton>
                     </ListItem>
                     </Box >
                         <Box style={{fontSize:'20pt'}}
-                        Box sx={{ p: 1, flexGrow: 1, width: 400, overflowY:'hidden', overflowX:'hidden' }}>
+                        Box sx={{ p: 1, flexGrow: 1, width: 400, overflowY:'hidden', overflowX:'hidden', color:'black' }}>
                         by:{idNamePair.playlist.ownerUsername}  
                         </Box>
                 </Box>
@@ -349,7 +357,12 @@ function ListCard(props) {
                                 handleDeleteList(event, idNamePair._id)
                             }}
                             disabled ={ (auth.user.email === idNamePair.ownerEmail)}>Delete</Button>
-                            <Button class="insideButtons" >Duplicate</Button>
+                            <Button class="insideButtons"
+                            disabled={(auth.loggedIn===false)}
+                            onClick={(event) => {
+                                handleDuplicate(event);
+                            }} 
+                            >Duplicate</Button>
                             <IconButton onClick={(event) => {
                                 handleCloseList(event, idNamePair._id)
                             }}>
@@ -375,13 +388,13 @@ function ListCard(props) {
                 <Box sx = {{flexDirection:'column', p: 1, flexGrow: 1, overflowY:'hidden', overflowX:'hidden' }}
                 onClick={(event)=>{handleSingleClick(event,idNamePair._id)}}>
                      <ListItem sx={{width: 1, flexGrow: 1, height:'4vh'}} >
-                        <Typography sx = {{width:400, overflow:'hidden', flexGrow: 1}} style ={{fontSize:'24pt'}}>{idNamePair.name}  </Typography>
-                        <IconButton sx={{float:'right', marginRight:'3px', flexGrow: 1}} onClick={(event)=>{handleLikes(event, idNamePair._id)}} style={likeColor}><ThumbUpIcon></ThumbUpIcon><Box sx={{marginLeft:'3px', marginRight:'3px'}}>{idNamePair.playlist.likesList.length}</Box></IconButton>
-                        <IconButton sx={{float:'right', marginRight:'3px', flexGrow: 1}} onClick={(event)=>{handledisLikes(event, idNamePair._id)}}style={disLikeColor}><ThumbDownIcon></ThumbDownIcon><Box sx={{marginLeft:'3px', marginRight:'3px'}}>{idNamePair.playlist.dislikesList.length}</Box></IconButton>
+                        <Typography sx = {{width:400, overflow:'hidden', flexGrow: 1}} style ={{fontSize:'24pt', color:'black' }}>{idNamePair.name}  </Typography>
+                        <IconButton disabled={(auth.loggedIn===false)} sx={{float:'right', marginRight:'3px', flexGrow: 1}} onClick={(event)=>{handleLikes(event, idNamePair._id)}} style={likeColor}><ThumbUpIcon></ThumbUpIcon><Box sx={{marginLeft:'3px', marginRight:'3px'}}>{idNamePair.playlist.likesList.length}</Box></IconButton>
+                        <IconButton disabled={(auth.loggedIn===false)} sx={{float:'right', marginRight:'3px', flexGrow: 1}} onClick={(event)=>{handledisLikes(event, idNamePair._id)}}style={disLikeColor}><ThumbDownIcon></ThumbDownIcon><Box sx={{marginLeft:'3px', marginRight:'3px'}}>{idNamePair.playlist.dislikesList.length}</Box></IconButton>
                     </ListItem>
                     <Box style={{fontSize:'20pt'}}
-                    sx={{ p: 1, flexGrow: 1, width: 400, overflowY:'hidden', overflowX:'hidden' }}  >
-                        by:{idNamePair.playlist.ownerUsername}  
+                    sx={{ p: 1, flexGrow: 1, width: 400, overflowY:'hidden', overflowX:'hidden' , color:'black'}}  >
+                        by:<a>{idNamePair.playlist.ownerUsername}</a>  
                     </Box>
                     <ListItem>
                         <Typography sx = {{width:400, overflow:'hidden', flexGrow: 1}} style ={{fontSize:'12pt', color:'green'}}>Published: {publishDate}</Typography>
@@ -419,10 +432,10 @@ function ListCard(props) {
                 onClick={(event)=>{handleDoubleClick(event,idNamePair._id)}}>
                     <Box sx={{ p: 1, flexGrow: 1, width: 400, overflowY:'hidden', overflowX:'hidden' }}
                     
-                    style={{fontSize:'24pt'}}>{idNamePair.name}
+                    style={{fontSize:'24pt', color:'black'}}>{idNamePair.name}
                     </Box>
                         <Box style={{fontSize:'10pt'}}
-                        Box sx={{ p: 1, flexGrow: 1, width: 400, overflowY:'hidden', overflowX:'hidden' }}>
+                        Box sx={{ p: 1, flexGrow: 1, width: 400, overflowY:'hidden', overflowX:'hidden' , color:'black'}}>
                         by:{idNamePair.playlist.ownerUsername}  
                         </Box>
                 </Box>
@@ -460,7 +473,9 @@ function ListCard(props) {
                             <Button class= "insideButtons" onClick={(event) => {
                                 handleDeleteList(event, idNamePair._id)
                             }}>Delete</Button>
-                            <Button class="insideButtons" >Duplicate</Button>
+                            <Button class="insideButtons" onClick={(event) => {
+                                handleDuplicate(event)
+                            }}>Duplicate</Button>
                             <IconButton onClick={(event) => {
                                 handleCloseList(event, idNamePair._id)
                             }}>

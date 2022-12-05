@@ -89,6 +89,27 @@ export default function YoutubePlaylister() {
         
     }
 
+    function loadVideo(player) {
+        console.log(songs.length + "                  asdasassadadasdasdasdadasddasd songs.legnth")
+        if(songs.length>0){
+            // setSongNumb(currentSong + 1);
+            // setTitle(songs[currentSong].title)
+            // setArtist(songs[currentSong].artist)
+            document.getElementById("playlistName").innerHTML = "Playlist: "+ (store.listeningList.name);
+            document.getElementById("songNumber").innerHTML = "Song #: "+ (currentSong +1);
+            document.getElementById("titleName").innerHTML = "Title: "+ songs[currentSong].title;
+            document.getElementById("artistName").innerHTML = "Artist: "+ songs[currentSong].artist;
+            // songNub = currentSong +1
+            // title = songs[currentSong].title
+            // artist = songs[currentSong].artist
+            // console.log(songNub + " " + title+" "+artist+"    asdasddasasassaasdas        ")
+        }
+        let song = playlist[currentSong];
+        console.log(currentSong + " THIS IS WHAT CURRENT SONG IS IN LOAD AND PLAY")
+        player.loadVideoById(song);
+        player.pauseVideo()
+    }
+
     
 
     // THIS FUNCTION INCREMENTS THE PLAYLIST SONG TO THE NEXT ONE
@@ -113,7 +134,7 @@ export default function YoutubePlaylister() {
 function onPlayerReady(event) {
     // player = event.target
     setPlayer(event.target)
-    loadAndPlayCurrentSong(event.target);
+    loadVideo(event.target);
 }
 
     // THIS IS OUR EVENT HANDLER FOR WHEN THE YOUTUBE PLAYER'S STATE
@@ -180,7 +201,7 @@ function onPlayerReady(event) {
     {
         //console.log("this is happening")
         youtubePlayer = 
-            <Box  >
+            <Box style={{backgroundColor:'#92A5DE'}} >
                 <Box sx = {{pointerEvents:'none'}}>
                     <YouTube
                     videoId={playlist[currentSong]}
@@ -214,7 +235,7 @@ function onPlayerReady(event) {
     else
     {
         youtubePlayer = 
-            <Box>
+            <Box style={{fontSize:"24pt", backgroundColor:'transparent'}}>
                 No songs
             </Box>
     }

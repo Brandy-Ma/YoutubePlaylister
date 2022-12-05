@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
@@ -34,9 +34,10 @@ function TabPanel(props) {
         id={`simple-tabpanel-${index}`}
         aria-labelledby={`simple-tab-${index}`}
         {...other}
+        
       >
         {value === index && (
-          <Box sx={{ p: 3 }}>
+          <Box sx={{ p: 3, }}>
             <Typography>{children}</Typography>
           </Box>
         )}
@@ -66,12 +67,23 @@ const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
 
     useEffect(() => {
-        store.loadIdNamePairs();
+        if(auth.loggedIn)
+        {
+            store.loadIdNamePairs();
+            updateSearch()
+        }
+
     }, []);
 
     function handleCreateNewList() {
         store.createNewList();
     }
+
+    const [search, setSearch] = useState(store.searchWord)
+
+
+
+
     let listCard = "";
     if (store) {
         
@@ -97,7 +109,7 @@ const HomeScreen = () => {
         {
             setValue(0);
         }
-
+        updateSearch()
       });
 
     const handleChange = (event, newValue) => {
@@ -119,7 +131,7 @@ const HomeScreen = () => {
     
     const comments = [];
     let newTextField = "";
-    if(store.listeningList && store.listeningList.published && store.listeningList.published.isPublished)
+    if(store.listeningList && store.listeningList.published && store.listeningList.published.isPublished && auth.loggedIn)
     {
         newTextField = 
         <TextField
@@ -132,7 +144,9 @@ const HomeScreen = () => {
         />
     }
    
-    
+    const updateSearch = (event)  => {
+        setSearch(store.searchWord)
+    }
     
     
     let homeScreen = 
@@ -153,16 +167,16 @@ const HomeScreen = () => {
                 <MUIDeleteModal />
             </Box>
 
-            <Box id = "list-selector-list-right" bgcolor = 'white' >
+            <Box id = "list-selector-list-right" bgcolor = 'transparent' >
                 <Box sx={{ width: '100%', overflowX:'hidden'}}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }} >
-                        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                        <Tab label="Player"  {...a11yProps(1)}/>
-                        <Tab label="Comments" {...a11yProps(1)} />
+                        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" sx={{p:1}}>
+                        <Tab label="Player"  {...a11yProps(1)} sx={{backgroundColor:"white"}} />
+                        <Tab label="Comments" {...a11yProps(1) } sx={{backgroundColor:"white"}}/>
                         </Tabs>
                     </Box>
                     <TabPanel value={value} index={0}  >
-                    <Box id = "Player-Tab" >
+                    <Box id = "Player-Tab"  >
                             <YoutubePlaylister></YoutubePlaylister>
                      </Box>
                     </TabPanel>
@@ -189,7 +203,7 @@ const HomeScreen = () => {
                     </TabPanel>
                 </Box>
             </Box>
-            <Statusbar></Statusbar>
+            <Statusbar search = {search}></Statusbar>
         </Box>
 
     if(store.listeningList && store.listeningList.comments)
@@ -232,12 +246,12 @@ const HomeScreen = () => {
                         sx ={{width: 1, display:'column'}}>
                             <Box sx ={{width: 1, height: '45vh', display:'column'}}>
                                 <List 
-                                    sx={{ width: '100%', bgcolor: 'background.paper', overflowY:"auto", maxHeight:'43vh'}}
+                                    sx={{ width: '100%', bgcolor: 'background.paper', overflowY:"auto", maxHeight:'43vh', height:'auto'}}
                                     >
                                     {
                                         store.listeningList.comments.map((comment, index) => (
                                             <Box 
-                                            style ={{backgroundColor:'#e8c205', border: '3px solid black', borderRadius:' 5px', marginBottom: '10px'}}
+                                            style ={{backgroundColor:'#e8c205', border: '3px solid black', borderRadius:' 5px', marginBottom: '10px', flexGrow:1, overflowWrap:' break-word'}}
                                             >
                                                 <Box 
                                                 style= {{color:'blue'}}>
@@ -261,7 +275,7 @@ const HomeScreen = () => {
                     </TabPanel>
                 </Box>
             </Box>
-            <Statusbar></Statusbar>
+            <Statusbar search = {search}></Statusbar>
         </Box>
     }
 

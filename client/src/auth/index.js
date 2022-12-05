@@ -11,7 +11,8 @@ export const AuthActionType = {
     LOGIN_USER: "LOGIN_USER",
     LOGOUT_USER: "LOGOUT_USER",
     REGISTER_USER: "REGISTER_USER",
-    ERROR_MESSAGE: "ERROR_MESSAGE"
+    ERROR_MESSAGE: "ERROR_MESSAGE",
+    GUEST_ACCOUNT:"GUEST_ACCOUNT"
 }
 
 function AuthContextProvider(props) {
@@ -62,6 +63,13 @@ function AuthContextProvider(props) {
                     user: null,
                     loggedIn: false,
                     errorMessage: payload.errorMessage
+                });
+            }
+            case AuthActionType.GUEST_ACCOUNT: {
+                return setAuth({
+                    user: 'guest',
+                    loggedIn: false,
+                    errorMessage: ""
                 });
             }
             default:
@@ -155,12 +163,26 @@ function AuthContextProvider(props) {
 
     auth.getUserInitials = function() {
         let initials = "";
+        if(auth.user ==="guest")
+        {
+
+        }
+        else
         if (auth.user) {
             initials += auth.user.firstName.charAt(0);
             initials += auth.user.lastName.charAt(0);
         }
         console.log("user initials: " + initials);
         return initials;
+    }
+
+    auth.setGuest = function() {
+        authReducer({
+            type: AuthActionType.GUEST_ACCOUNT,
+            payload: {
+                
+            }
+        })
     }
 
     return (

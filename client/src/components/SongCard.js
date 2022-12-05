@@ -48,7 +48,9 @@ function SongCard(props) {
         // background:'url(https://images.unsplash.com/photo-1557672172-298e090bd0f1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8cmVzaW58ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60)', 
         // backgroundSize:"cover", 
         // backgroundRepeat:"no-repeat" 
-        overflow: 'hidden'
+        overflow: 'hidden',
+        backgroundColor :"#333080",
+        color:"white"
     }
     let cardClass = "list-card unselected-list-card";
 

@@ -15,16 +15,30 @@ getLoggedIn = async (req, res) => {
 
         const loggedInUser = await User.findOne({ _id: userId });
         console.log("loggedInUser: " + loggedInUser);
-
-        return res.status(200).json({
-            loggedIn: true,
-            user: {
-                firstName: loggedInUser.firstName,
-                lastName: loggedInUser.lastName,
-                userName: loggedInUser.userName,
-                email: loggedInUser.email
-            }
-        })
+        if(loggedInUser)
+        {
+            return res.status(200).json({
+                loggedIn: true,
+                user: {
+                    firstName: loggedInUser.firstName,
+                    lastName: loggedInUser.lastName,
+                    userName: loggedInUser.userName,
+                    email: loggedInUser.email
+                }
+            })
+        }
+        else{
+            return res.status(201).json({
+                loggedIn:false,
+                user:{
+                    firstName: "Guest",
+                    lastName: "Guest",
+                    userName: "Guest",
+                    email: "Guest"
+                }
+            })
+        }
+        
     } catch (err) {
         console.log("err: " + err);
         res.json(false);
@@ -100,7 +114,6 @@ registerUser = async (req, res) => {
     try {
         const { firstName, lastName, userName, email, password, passwordVerify } = req.body;
         console.log("create user: " + firstName + " " + lastName + " " +userName+" " + email + " " + password + " " + passwordVerify);
-        console.log("helloooooooooo");
         if (!firstName || !lastName ||!userName || !email || !password || !passwordVerify) {
             return res
                 .status(800)
