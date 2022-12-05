@@ -461,27 +461,24 @@ function GlobalStoreContextProvider(props) {
     // THIS FUNCTION CREATES A NEW LIST
     store.createNewList = async function () {
         let newListName = "Untitled" + store.newListCounter;
-        //console.log("USER DETAINS"+ JSON.stringify(auth.user));
-        const response = await api.createPlaylist(newListName, auth.user.userName, 
+        console.log("USER DETAINS"+ JSON.stringify(auth.user)+store.newListCounter);
+        async function asyncCreateNewList() {
+        let response = await api.createPlaylist(newListName, auth.user.userName, 
             [], auth.user.email, 0, {isPublished : false, whenPublished: null}, [], [], []);
-       // console.log("createNewList response: " + response);
-        if (response.status === 201) {
-            tps.clearAllTransactions();
-            let newList = response.data.playlist;
-            storeReducer({
-                type: GlobalStoreActionType.CREATE_NEW_LIST,
-                payload: newList
+        console.log("createNewList response: " + response);
+            if (response.status === 201) {
+                //tps.clearAllTransactions();
+                let newList = response.data.playlist;
+                /* Creating a new list. */
+                // storeReducer({
+                //     type: GlobalStoreActionType.CREATE_NEW_LIST,
+                //     payload: newList
+                // }
+                // )
+            store.loadIdNamePairs()
             }
-            );
-
-            // IF IT'S A VALID LIST THEN LET'S START EDITING IT
-           // history.push("/playlist/" + newList._id);
-           store.newListCounter = store.newListCounter + 1
-           store.loadIdNamePairs();
-        }
-        else {
-            console.log("API FAILED TO CREATE A NEW LIST");
-        }
+    }
+    asyncCreateNewList()
     }
 
     // THIS FUNCTION LOADS ALL THE ID, NAME PAIRS SO WE CAN LIST ALL THE LISTS
@@ -494,6 +491,7 @@ function GlobalStoreContextProvider(props) {
                     type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
                     payload: pairsArray
                 });
+                console.log(store.idNamePairs+ "AFTER I LOAD" +response.data.idNamePairs +"CURRENT LIST"+ store.currentList);
             }
             else {
                 console.log("API FAILED TO GET THE LIST PAIRS");
@@ -1569,6 +1567,7 @@ function GlobalStoreContextProvider(props) {
                 playlist.songs, auth.user.email, 0, {isPublished : false, whenPublished: null}, [], [], []);
                 if(store.currentView === 'home')
                 {
+                    console.log(store.currentView)
                     store.loadIdNamePairs();
                 }
             }

@@ -206,9 +206,10 @@ const HomeScreen = () => {
             <Statusbar search = {search}></Statusbar>
         </Box>
 
-    if(store.listeningList && store.listeningList.comments)
+    if(store.listeningList && store.listeningList.comments && store.listeningList.published.isPublished)
     {
-        console.log(JSON.stringify(store.idNamePair) + "THIS IS OFF RENDER")
+        console.log(JSON.stringify(store.idNamePair) + "THIS IS OFF RENDesdesdeER")
+        console.log(JSON.stringify(store.listeningList) + "THIS IS OFF RENDER ASDHADJASDJKASKJDS")
         homeScreen = 
         <Box id="playlist-selector">
             <AppBanner /> 

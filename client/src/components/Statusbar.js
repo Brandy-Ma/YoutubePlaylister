@@ -40,13 +40,8 @@ function Statusbar(props) {
     }
 
     
-    function handleCreateNewList() {
-        store.createNewList();
-    }
-
+    
     useEffect( ()=> {
-        console.log(search+"ASHDHASDASUdASH")
-        setNames(search);
         if( store.currentView === "allList")
         {
             // name = document.getElementById("search-textField").value
@@ -80,7 +75,10 @@ function Statusbar(props) {
     }, [store.searchWord, store.currentView]);
 
 
+    function handleCreateNewList() {
 
+        store.createNewList()
+    }
     
 
 

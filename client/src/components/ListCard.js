@@ -79,34 +79,37 @@ function ListCard(props) {
     }
     let likeColor = {
     }
-    if(auth.loggedin===true)
+
+    if(idNamePair.playlist)
     {
-        if(idNamePair.playlist)
+        if(idNamePair.playlist.likesList)
         {
-            if(idNamePair.playlist.likesList)
+            if(auth.loggedIn)
             {
-                let found = idNamePair.playlist.likesList.find(element => element ===  auth.user.email)
+
+            
+            let found = idNamePair.playlist.likesList.find(element => element ===  auth.user.email)
+                if(found === auth.user.email)
+                {
+                    likeColor = {
+                        color: 'green'
+                    }
+                }
+                else 
+                {
+                    found = idNamePair.playlist.dislikesList.find(element => element ===  auth.user.email)
                     if(found === auth.user.email)
                     {
-                        likeColor = {
-                            color: 'green'
+                        disLikeColor = {
+                            color: 'red'
                         }
                     }
-                    else 
-                    {
-                        found = idNamePair.playlist.dislikesList.find(element => element ===  auth.user.email)
-                        if(found === auth.user.email)
-                        {
-                            disLikeColor = {
-                                color: 'red'
-                            }
-                        }
-                    }
-                    
-                
+                }
             }
+            
         }
     }
+
     
     function handleLoadList(event, id) {
         //console.log("handleLoadList for " + id);

@@ -10,7 +10,7 @@ import { Box, Button } from '@mui/material';
 export default function HomeWrapper() {
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
-    console.log("HomeWrapper auth.loggedIn: " + auth.loggedIn);
+    console.log("HomeWrapper auth.loggedIn: " + auth.loggedIn +" GUEST ACCONG" + store.guestAccount);
     
     if (auth.loggedIn || store.guestAccount === true)
         return <HomeScreen />
