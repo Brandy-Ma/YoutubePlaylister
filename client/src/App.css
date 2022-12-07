@@ -529,8 +529,8 @@ input {
 
 #list-opened{
   flex-direction: row;
-  height: 53vh; 
-  max-height: 53vh; 
+  height: 55vh; 
+  max-height: 60vh; 
   border: 2px;
   border-color: white;
   border-width: 100px;
@@ -538,6 +538,7 @@ input {
   background-color: #F0F2DA;
   position: relative;
   padding-bottom: 2%;
+  margin-bottom: 10px;
 
 }
 #fixed-Bottom{
