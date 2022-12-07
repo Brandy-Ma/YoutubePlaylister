@@ -208,8 +208,8 @@ const HomeScreen = () => {
 
     if(store.listeningList && store.listeningList.comments && store.listeningList.published.isPublished)
     {
-        console.log(JSON.stringify(store.idNamePair) + "THIS IS OFF RENDesdesdeER")
-        console.log(JSON.stringify(store.listeningList) + "THIS IS OFF RENDER ASDHADJASDJKASKJDS")
+        //console.log(JSON.stringify(store.idNamePair) + "THIS IS OFF RENDesdesdeER")
+        //console.log(JSON.stringify(store.listeningList) + "THIS IS OFF RENDER ASDHADJASDJKASKJDS")
         homeScreen = 
         <Box id="playlist-selector">
             <AppBanner /> 

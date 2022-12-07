@@ -156,6 +156,7 @@ function ListCard(props) {
     async function handleDeleteList(event, id) {
         event.stopPropagation();
         let _id = event.target.id;
+        //console.log(auth.user.email + " JERE" + JSON.stringify(idNamePair))
         _id = ("" + _id).substring("delete-list-".length);
         store.markListForDeletion(id);
     }
@@ -211,7 +212,7 @@ function ListCard(props) {
         }
         else if(event.detail ===1)
         { 
-            console.log("here")
+            //console.log("here")
             if(store.listeningList && store.listeningList._id !== id)
             {
                 store.playCurrentList(id);
@@ -359,7 +360,7 @@ function ListCard(props) {
                             <Button class= "insideButtons" onClick={(event) => {
                                 handleDeleteList(event, idNamePair._id)
                             }}
-                            disabled ={ (auth.user.email === idNamePair.ownerEmail)}>Delete</Button>
+                            disabled ={ (auth.user.email !== idNamePair.playlist.ownerEmail)}>Delete</Button>
                             <Button class="insideButtons"
                             disabled={(auth.loggedIn===false)}
                             onClick={(event) => {
@@ -377,7 +378,7 @@ function ListCard(props) {
         </Box>
     }
     else if(idNamePair.playlist.published.isPublished === true){
-        console.log(JSON.stringify(idNamePair))
+        //console.log(JSON.stringify(idNamePair))
         cardElement =
         <Box 
         style = {publishedStyle}>
@@ -471,8 +472,8 @@ function ListCard(props) {
                 <Box id = "fixed-Bottom">  
                     <ListItem >
                             <Button class="insideButtons" onClick={handlePublish}>Publish</Button>
-                            <Button class="insideButtons" onClick ={handleUndo}>Undo</Button>
-                            <Button class="insideButtons" onClick={handleRedo}>Redo</Button>
+                            <Button class="insideButtons" onClick ={handleUndo} disabled={!store.canUndo()}>Undo</Button>
+                            <Button class="insideButtons" onClick={handleRedo} disabled ={!store.canRedo()}>Redo</Button>
                             <Button class= "insideButtons" onClick={(event) => {
                                 handleDeleteList(event, idNamePair._id)
                             }}>Delete</Button>

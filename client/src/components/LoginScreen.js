@@ -16,13 +16,16 @@ import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import MUIAlertModal from './MUIAlertModal'
+import { GlobalStoreContext } from '../store'
 
 export default function LoginScreen() {
+    const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
+        store.reset();
         auth.loginUser(
             formData.get('email'),
             formData.get('password')

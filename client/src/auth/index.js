@@ -53,8 +53,8 @@ function AuthContextProvider(props) {
             }
             case AuthActionType.REGISTER_USER: {
                 return setAuth({
-                    user: payload.user,
-                    loggedIn: true,
+                    user: null,
+                    loggedIn: false,
                     errorMessage: ""
                 })
             }
@@ -102,8 +102,9 @@ function AuthContextProvider(props) {
                         user: response.data.user
                     }
                 })
-                auth.loginUser(email, password)
+                //auth.loginUser(email, password)
                 //history.push("/login");
+                history.push('/login/')
             }
         }
         catch(err){
@@ -123,6 +124,7 @@ function AuthContextProvider(props) {
                 errorMessage: ""
             }
         });
+       
     }
     auth.loginUser = async function(email, password) {
         try{
