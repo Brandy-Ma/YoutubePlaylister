@@ -434,8 +434,21 @@ function GlobalStoreContextProvider(props) {
         async function asyncChangeListName(id) {
             let response = await api.getPlaylistById(id);
             if (response.data.success) {
+                let currentList = store.idNamePairs;
+                let currentIndex = 0;
+                let name = newName
+                console.log(JSON.stringify(currentList))
+                let tempList = currentList.filter(currentListElement => currentListElement.name === name)
+                console.log(tempList)
+                while(tempList.length>0){
+                    console.log(tempList.length >0)
+                    name = newName+"("+currentIndex+")";
+                    currentIndex = currentIndex +1
+                    tempList = currentList.filter(currentListElement => currentListElement.name === name)
+                    console.log("THis is working")
+                }
                 let playlist = response.data.playlist;
-                playlist.name = newName;
+                playlist.name = name;
                 async function updateList(playlist) {
                     response = await api.updatePlaylistById(playlist._id, playlist);
                     if (response.data.success) {
